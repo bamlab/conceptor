@@ -24,15 +24,18 @@ export function activate(context: vscode.ExtensionContext) {
       vscode.ViewColumn.Eight,
     );
 
-    if (!vscode.workspace.workspaceFolders) {
-      return;
-    }
-
-    const rootDir = vscode.workspace.workspaceFolders[0].uri.path;
     vscode.workspace
-      .openTextDocument(`${rootDir}/App.tsx`)
-      .then((projectDocument: vscode.TextDocument) => projectDocument.getText())
-      .then((text: string) => console.log(text));
+      .findFiles('**/*.{ts,js,tsx,jsx}', '**/node_modules/**')
+      .then((fileUris: vscode.Uri[]) => {
+        fileUris.forEach((fileUri: vscode.Uri) => {
+          vscode.workspace
+            .openTextDocument(fileUri.path)
+            .then((projectDocument: vscode.TextDocument) =>
+              projectDocument.getText(),
+            )
+            .then((text: string) => console.log(text));
+        });
+      });
   });
 
   context.subscriptions.push(disposable);
