@@ -23,6 +23,16 @@ export function activate(context: vscode.ExtensionContext) {
       'Conceptor',
       vscode.ViewColumn.Eight,
     );
+
+    if (!vscode.workspace.workspaceFolders) {
+      return;
+    }
+
+    const rootDir = vscode.workspace.workspaceFolders[0].uri.path;
+    vscode.workspace
+      .openTextDocument(`${rootDir}/App.tsx`)
+      .then((projectDocument: vscode.TextDocument) => projectDocument.getText())
+      .then((text: string) => console.log(text));
   });
 
   context.subscriptions.push(disposable);
