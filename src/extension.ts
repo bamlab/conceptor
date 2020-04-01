@@ -1,6 +1,7 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
+import { parse } from 'doctrine';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -33,7 +34,18 @@ export function activate(context: vscode.ExtensionContext) {
             .then((projectDocument: vscode.TextDocument) =>
               projectDocument.getText(),
             )
-            .then((text: string) => console.log(text));
+            .then((text: string) => {
+              // TODO: Use a cleaner way to ignore file body and keep header
+              const [header, body] = text.split('**/');
+              if (!body) {
+                // the file actually has no header so we break
+                return;
+              }
+              const ast = parse(header, {
+                unwrap: true,
+              });
+              console.log(ast);
+            });
         });
       });
   });
