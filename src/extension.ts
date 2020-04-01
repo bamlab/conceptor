@@ -17,6 +17,12 @@ export function activate(context: vscode.ExtensionContext) {
 
     // Display a message box to the user
     vscode.window.showInformationMessage('🚀Launching Conceptor ...');
+
+    vscode.window.createWebviewPanel(
+      'conceptor.preview',
+      'Conceptor',
+      vscode.ViewColumn.Eight,
+    );
   });
 
   context.subscriptions.push(disposable);
