@@ -3,7 +3,22 @@
 import * as vscode from 'vscode';
 import { parse } from 'doctrine';
 
-function getWebviewContent() {
+interface NodeType {
+  data: {
+    id: string;
+    label: string;
+  };
+}
+interface EdgeType {
+  data: {
+    id: string;
+    source: string;
+    target: string;
+  };
+}
+
+function getWebviewContent(nodes: (NodeType | undefined)[], edges: EdgeType[]) {
+  const elements = [...nodes, ...edges];
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,24 +41,16 @@ function getWebviewContent() {
     <script>
       var cy = cytoscape({
         container: document.getElementById('cy'),
-        elements: [
-          { data: { id: 'a' } },
-          { data: { id: 'b' } },
-          {
-            data: {
-              id: 'ab',
-              source: 'a',
-              target: 'b'
-            }
-          }
-        ],
+        elements: ${JSON.stringify(elements)},
         style: [
           {
               selector: 'node',
               style: {
                   shape: 'round-rectangle',
+                  height: 140,
+                  width: 200,
                   'background-color': 'white',
-                  label: 'data(id)',
+                  label: 'data(label)',
                   'text-halign': 'center',
                   'text-valign': 'center'
               }
@@ -56,7 +63,7 @@ function getWebviewContent() {
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
-export function activate(context: vscode.ExtensionContext) {
+export const activate = (context: vscode.ExtensionContext) => {
   // Use the console to output diagnostic information (console.log) and errors (console.error)
   // This line of code will only be executed once when your extension is activated
   console.log('Congratulations, your extension "conceptor" is now active!');
@@ -64,7 +71,7 @@ export function activate(context: vscode.ExtensionContext) {
   // The command has been defined in the package.json file
   // Now provide the implementation of the command with registerCommand
   // The commandId parameter must match the command field in package.json
-  let disposable = vscode.commands.registerCommand('conceptor', () => {
+  let disposable = vscode.commands.registerCommand('conceptor', async () => {
     // The code you place here will be executed every time your command is executed
 
     // Display a message box to the user
@@ -77,35 +84,41 @@ export function activate(context: vscode.ExtensionContext) {
       { enableScripts: true },
     );
 
-    panel.webview.html = getWebviewContent();
-
-    // vscode.workspace
-    //   .findFiles('**/*.{ts,js,tsx,jsx}', '**/node_modules/**')
-    //   .then((fileUris: vscode.Uri[]) => {
-    //     fileUris.forEach((fileUri: vscode.Uri) => {
-    //       vscode.workspace
-    //         .openTextDocument(fileUri.path)
-    //         .then((projectDocument: vscode.TextDocument) =>
-    //           projectDocument.getText(),
-    //         )
-    //         .then((text: string) => {
-    //           // TODO: Use a cleaner way to ignore file body and keep header
-    //           const [header, body] = text.split('**/');
-    //           if (!body) {
-    //             // the file actually has no header so we break
-    //             return;
-    //           }
-    //           const ast = parse(header, {
-    //             unwrap: true,
-    //           });
-    //           console.log(ast);
-    //         });
-    //     });
-    //   });
+    // const nodes: NodeType[] = [];
+    const fileUris = await vscode.workspace.findFiles(
+      '**/*.{ts,js,tsx,jsx}',
+      '**/node_modules/**',
+    );
+    const nodes = await Promise.all(
+      fileUris.map(async (fileUri: vscode.Uri) => {
+        const projectDocument = await vscode.workspace.openTextDocument(
+          fileUri.path,
+        );
+        const text = projectDocument.getText();
+        // TODO: Use a cleaner way to ignore file body and keep header
+        const [header, body] = text.split('**/');
+        if (!body) {
+          // the file actually has no header so we break
+          return;
+        }
+        const ast = parse(header, {
+          unwrap: true,
+        });
+        const nameTag = ast.tags.find(({ title }) => title === 'name');
+        if (!nameTag || !nameTag.name) {
+          console.log(`No name tag for component: ${ast}`);
+          return;
+        }
+        return { data: { id: nameTag.name, label: nameTag.name } };
+      }),
+    );
+    panel.webview.html = getWebviewContent(
+      nodes.filter(node => !!node),
+      [],
+    );
   });
-
   context.subscriptions.push(disposable);
-}
+};
 
 // this method is called when your extension is deactivated
 export function deactivate() {}
