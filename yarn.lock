@@ -772,6 +772,11 @@ import-fresh@^3.0.0:
     parent-module "^1.0.0"
     resolve-from "^4.0.0"
 
+import-parser@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/import-parser/-/import-parser-0.0.2.tgz#3a07032d5ea3c0edbdbcb4f08cd6993502b6fbde"
+  integrity sha512-OJO/joyp7hD1P+cwrErbLx7B8weCOZCeAeOHFdNtHnkTpe9kMpFqctvUB3Uk8qddp8HLT2JhmIlXh/91BGPN8g==
+
 imurmurhash@^0.1.4:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/imurmurhash/-/imurmurhash-0.1.4.tgz#9218b9b2b928a238b13dc4fb6b6d576f231453ea"

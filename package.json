@@ -44,6 +44,7 @@
     "vscode-test": "^1.3.0"
   },
   "dependencies": {
-    "doctrine": "^3.0.0"
+    "doctrine": "^3.0.0",
+    "import-parser": "^0.0.2"
   }
 }
