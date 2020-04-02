@@ -2,6 +2,7 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 import { parse } from 'doctrine';
+const ImportParser = require('import-parser');
 
 interface NodeType {
   data: {
@@ -89,6 +90,7 @@ export const activate = (context: vscode.ExtensionContext) => {
       '**/*.{ts,js,tsx,jsx}',
       '**/node_modules/**',
     );
+
     const nodes = await Promise.all(
       fileUris.map(async (fileUri: vscode.Uri) => {
         const projectDocument = await vscode.workspace.openTextDocument(
@@ -104,12 +106,20 @@ export const activate = (context: vscode.ExtensionContext) => {
         const ast = parse(header, {
           unwrap: true,
         });
+
+        const collaborators = ImportParser(body)
+          .map(({ modulePath }: { modulePath: string }) => modulePath)
+          .filter((dependency: string) => dependency.startsWith('.'))
+          .map((collaborator: string) => collaborator.split('/').pop());
+
         const nameTag = ast.tags.find(({ title }) => title === 'name');
         if (!nameTag || !nameTag.name) {
           console.log(`No name tag for component: ${ast}`);
           return;
         }
-        return { data: { id: nameTag.name, label: nameTag.name } };
+        return {
+          data: { id: nameTag.name, label: nameTag.name, collaborators },
+        };
       }),
     );
     panel.webview.html = getWebviewContent(
