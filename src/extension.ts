@@ -9,6 +9,7 @@ interface NodeType {
     id: string;
     label: string;
   };
+  collaborators: string[];
 }
 interface EdgeType {
   data: {
@@ -55,7 +56,14 @@ function getWebviewContent(nodes: (NodeType | undefined)[], edges: EdgeType[]) {
                   'text-halign': 'center',
                   'text-valign': 'center'
               }
-          }]    
+          },
+          {
+            selector: 'edge',
+            style: {
+              'target-arrow-shape': 'vee'
+            }
+          }
+        ]    
       });
     </script>
 </body>
@@ -107,24 +115,50 @@ export const activate = (context: vscode.ExtensionContext) => {
           unwrap: true,
         });
 
-        const collaborators = ImportParser(body)
-          .map(({ modulePath }: { modulePath: string }) => modulePath)
-          .filter((dependency: string) => dependency.startsWith('.'))
-          .map((collaborator: string) => collaborator.split('/').pop());
-
         const nameTag = ast.tags.find(({ title }) => title === 'name');
         if (!nameTag || !nameTag.name) {
           console.log(`No name tag for component: ${ast}`);
           return;
         }
+
+        const collaborators = ImportParser(body)
+          .map(({ importList }: { importList: string[] }) => importList)
+          .flat();
+        console.log(collaborators);
+
         return {
-          data: { id: nameTag.name, label: nameTag.name, collaborators },
+          data: { id: nameTag.name, label: nameTag.name },
+          collaborators,
         };
       }),
     );
+    const documentedNodes = nodes.filter(node => !!node);
+
+    const edges = documentedNodes
+      .map((node: NodeType) => {
+        const collaborationEdges = [];
+        node.collaborators.forEach((collaborator: string) => {
+          if (
+            documentedNodes.find((otherNode: NodeType) => {
+              return otherNode.data.id === collaborator;
+            })
+          ) {
+            collaborationEdges.push({
+              data: {
+                id: `${node.data.id}->${collaborator}`,
+                source: node.data.id,
+                target: collaborator,
+              },
+            });
+          }
+        });
+        return collaborationEdges;
+      })
+      .flat();
+
     panel.webview.html = getWebviewContent(
       nodes.filter(node => !!node),
-      [],
+      edges,
     );
   });
   context.subscriptions.push(disposable);
