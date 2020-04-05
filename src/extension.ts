@@ -1,3 +1,10 @@
+/**
+ * @name extension
+ * @description Conceptor Extension entry point
+ * @responsibility Create the extension panel
+ * @responsibility List project files for which Conception may be relevant
+ **/
+
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
