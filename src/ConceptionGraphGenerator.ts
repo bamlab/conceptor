@@ -4,21 +4,8 @@
  **/
 
 import { renderFile } from 'ejs';
-
-interface NodeType {
-  data: {
-    id: string;
-    label: string;
-  };
-  collaborators: string[];
-}
-interface EdgeType {
-  data: {
-    id: string;
-    source: string;
-    target: string;
-  };
-}
+import { CRCCard } from './types/model';
+import { NodeType, EdgeType } from './types/view';
 
 const graphStyle = [
   {
@@ -41,10 +28,7 @@ const graphStyle = [
   },
 ];
 
-const getWebviewContent = async (
-  nodes: (NodeType | undefined)[],
-  edges: EdgeType[],
-) => {
+const getWebviewContent = async (nodes: NodeType[], edges: EdgeType[]) => {
   const elements = [...nodes, ...edges];
   return new Promise<string>((resolve, reject) => {
     renderFile(
@@ -69,17 +53,16 @@ const getWebviewContent = async (
 };
 
 export class ConceptionGraphGenerator {
-  public static async generateConceptionGraph(crcCards: CRCCardDataType) {
+  public static async generateConceptionGraph(crcCards: CRCCard[]) {
     const nodes = crcCards.map((crcCard) => ({
       data: { id: crcCard.name, label: crcCard.name },
     }));
-    console.log(crcCards);
     const edges = crcCards
-      .map((crcCard: CRCCardDataType) => {
-        const collaborationEdges = [];
-        crcCard.collaborators.forEach((collaborator: string) => {
+      .map((crcCard: CRCCard) => {
+        const collaborationEdges: EdgeType[] = [];
+        crcCard.collaborators?.forEach((collaborator: string) => {
           if (
-            crcCards.find((otherCRCCard: CRCCardDataType) => {
+            crcCards.find((otherCRCCard: CRCCard) => {
               return otherCRCCard.name === collaborator;
             })
           ) {

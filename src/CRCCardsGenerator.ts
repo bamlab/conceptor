@@ -5,18 +5,9 @@
 
 import * as vscode from 'vscode';
 import { parse, Annotation, Tag } from 'doctrine';
+import { without } from 'lodash';
+import { CRCCard, ConceptionDocumentFormatType } from './types/model';
 const ImportParser = require('import-parser');
-
-interface CRCCardDataType {
-  name: string;
-  responsibilities?: string[];
-  collaborators?: string[];
-}
-
-interface ConceptionDocumentFormatType {
-  header?: string;
-  body: string;
-}
 
 class CRCParser {
   private static preparseDocument = (
@@ -54,8 +45,8 @@ class CRCParser {
   private static extractNameAndResponsibilities = (
     documentHeader: string,
   ): {
-    name: CRCCardDataType['name'];
-    responsibilities?: CRCCardDataType['responsibilities'];
+    name: CRCCard['name'];
+    responsibilities?: CRCCard['responsibilities'];
   } => {
     const annotation = parse(documentHeader, {
       unwrap: true,
@@ -70,7 +61,7 @@ class CRCParser {
       .flat();
   };
 
-  public static extractCRCData = (documentText: string): ?CRCCardDataType => {
+  public static extractCRCCard = (documentText: string) => {
     const { header, body } = CRCParser.preparseDocument(documentText);
     if (!header) {
       return null;
@@ -90,13 +81,16 @@ export class CRCCardsGenerator {
   };
 
   public static generateCRCCards = async (fileUris: vscode.Uri[]) => {
-    const crcCards = await Promise.all(
-      fileUris.map(async (fileUri: vscode.Uri) => {
-        const documentText = await CRCCardsGenerator.readFile(fileUri);
+    return without(
+      await Promise.all(
+        fileUris.map(async (fileUri: vscode.Uri) => {
+          const documentText = await CRCCardsGenerator.readFile(fileUri);
 
-        return CRCParser.extractCRCData(documentText);
-      }),
+          return CRCParser.extractCRCCard(documentText);
+        }),
+      ),
+      null,
     );
-    return crcCards.filter((crcCard) => !!crcCard);
+    // .filter((crcCard) => !!crcCard),
   };
 }
