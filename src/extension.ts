@@ -11,21 +11,6 @@ import * as vscode from 'vscode';
 import { CRCCardsGenerator } from './CRCCardsGenerator';
 import { ConceptionGraphGenerator } from './ConceptionGraphGenerator';
 
-interface NodeType {
-  data: {
-    id: string;
-    label: string;
-  };
-  collaborators: string[];
-}
-interface EdgeType {
-  data: {
-    id: string;
-    source: string;
-    target: string;
-  };
-}
-
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export const activate = (context: vscode.ExtensionContext) => {
@@ -57,7 +42,7 @@ export const activate = (context: vscode.ExtensionContext) => {
 
     const documentedNodes = await CRCCardsGenerator.generateCRCCards(fileUris);
 
-    panel.webview.html = ConceptionGraphGenerator.generateConceptionGraph(
+    panel.webview.html = await ConceptionGraphGenerator.generateConceptionGraph(
       documentedNodes,
     );
   });

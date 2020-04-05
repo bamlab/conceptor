@@ -3,59 +3,73 @@
  * @responsibility Generates a Conception graph given a set of CRC Cards
  **/
 
-function getWebviewContent(nodes: (NodeType | undefined)[], edges: EdgeType[]) {
-  const elements = [...nodes, ...edges];
-  return `<!DOCTYPE html>
-  <html lang="en">
-  <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Conceptor Graph</title>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.14.1/cytoscape.min.js"></script>
-  </head>
-  <style>
-      #cy {
-          width: 100%;
-          height: 100%;
-          position: absolute;
-          top: 0px;
-          left: 0px;
-      }
-  </style>
-  <body>
-      <div id="cy"></div>
-      <script>
-        var cy = cytoscape({
-          container: document.getElementById('cy'),
-          elements: ${JSON.stringify(elements)},
-          style: [
-            {
-                selector: 'node',
-                style: {
-                    shape: 'round-rectangle',
-                    height: 140,
-                    width: 200,
-                    'background-color': 'white',
-                    label: 'data(label)',
-                    'text-halign': 'center',
-                    'text-valign': 'center'
-                }
-            },
-            {
-              selector: 'edge',
-              style: {
-                'target-arrow-shape': 'vee'
-              }
-            }
-          ]    
-        });
-      </script>
-  </body>
-  </html>`;
+import { renderFile } from 'ejs';
+
+interface NodeType {
+  data: {
+    id: string;
+    label: string;
+  };
+  collaborators: string[];
+}
+interface EdgeType {
+  data: {
+    id: string;
+    source: string;
+    target: string;
+  };
 }
 
+const graphStyle = [
+  {
+    selector: 'node',
+    style: {
+      shape: 'round-rectangle',
+      height: 140,
+      width: 200,
+      'background-color': 'white',
+      label: 'data(label)',
+      'text-halign': 'center',
+      'text-valign': 'center',
+    },
+  },
+  {
+    selector: 'edge',
+    style: {
+      'target-arrow-shape': 'vee',
+    },
+  },
+];
+
+const getWebviewContent = async (
+  nodes: (NodeType | undefined)[],
+  edges: EdgeType[],
+) => {
+  const elements = [...nodes, ...edges];
+  return new Promise<string>((resolve, reject) => {
+    renderFile(
+      './src/extension_webview_panel.template.html',
+      {
+        script: `var cy = cytoscape({
+            container: document.getElementById('cy'),
+            elements: ${JSON.stringify(elements)},
+            style: ${JSON.stringify(graphStyle)},
+          });`,
+      },
+      {},
+      function (err, str) {
+        if (err) {
+          console.warn(err);
+          reject(err);
+        }
+        resolve(str);
+      },
+    );
+  });
+};
+
 export class ConceptionGraphGenerator {
-  public static generateConceptionGraph(documentedNodes) {
+  public static async generateConceptionGraph(documentedNodes) {
     const edges = documentedNodes
       .map((node: NodeType) => {
         const collaborationEdges = [];
@@ -77,6 +91,7 @@ export class ConceptionGraphGenerator {
         return collaborationEdges;
       })
       .flat();
+
     return getWebviewContent(documentedNodes, edges);
   }
 }
