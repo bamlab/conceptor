@@ -69,20 +69,24 @@ const getWebviewContent = async (
 };
 
 export class ConceptionGraphGenerator {
-  public static async generateConceptionGraph(documentedNodes) {
-    const edges = documentedNodes
-      .map((node: NodeType) => {
+  public static async generateConceptionGraph(crcCards: CRCCardDataType) {
+    const nodes = crcCards.map((crcCard) => ({
+      data: { id: crcCard.name, label: crcCard.name },
+    }));
+    console.log(crcCards);
+    const edges = crcCards
+      .map((crcCard: CRCCardDataType) => {
         const collaborationEdges = [];
-        node.collaborators.forEach((collaborator: string) => {
+        crcCard.collaborators.forEach((collaborator: string) => {
           if (
-            documentedNodes.find((otherNode: NodeType) => {
-              return otherNode.data.id === collaborator;
+            crcCards.find((otherCRCCard: CRCCardDataType) => {
+              return otherCRCCard.name === collaborator;
             })
           ) {
             collaborationEdges.push({
               data: {
-                id: `${node.data.id}->${collaborator}`,
-                source: node.data.id,
+                id: `${crcCard.name}->${collaborator}`,
+                source: crcCard.name,
                 target: collaborator,
               },
             });
@@ -92,6 +96,6 @@ export class ConceptionGraphGenerator {
       })
       .flat();
 
-    return getWebviewContent(documentedNodes, edges);
+    return getWebviewContent(nodes, edges);
   }
 }

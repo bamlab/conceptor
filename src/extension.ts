@@ -39,10 +39,10 @@ export const activate = (context: vscode.ExtensionContext) => {
       '**/node_modules/**',
     );
 
-    const documentedNodes = await CRCCardsGenerator.generateCRCCards(fileUris);
+    const crcCards = await CRCCardsGenerator.generateCRCCards(fileUris);
 
     panel.webview.html = await ConceptionGraphGenerator.generateConceptionGraph(
-      documentedNodes,
+      crcCards,
     );
   });
   context.subscriptions.push(disposable);

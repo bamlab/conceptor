@@ -4,45 +4,99 @@
  **/
 
 import * as vscode from 'vscode';
-import { parse } from 'doctrine';
+import { parse, Annotation, Tag } from 'doctrine';
 const ImportParser = require('import-parser');
 
+interface CRCCardDataType {
+  name: string;
+  responsibilities?: string[];
+  collaborators?: string[];
+}
+
+interface ConceptionDocumentFormatType {
+  header?: string;
+  body: string;
+}
+
+class CRCParser {
+  private static preparseDocument = (
+    documentText: string,
+  ): ConceptionDocumentFormatType => {
+    // TODO: Use a cleaner way to ignore file body and keep header
+    const [header, body] = documentText.split('**/');
+    if (!body) {
+      // the file actually has no header
+      return {
+        body: header,
+      };
+    }
+    return {
+      header,
+      body,
+    };
+  };
+
+  private static extractTagFromAnnotation = (
+    annotation: Annotation,
+    tagTitle: Tag['title'],
+  ) => {
+    const targetTag = annotation.tags.find(({ title }) => title === tagTitle);
+    if (!targetTag || !targetTag.name) {
+      throw new Error(
+        `Cannot extract document name from document annotation: ${JSON.stringify(
+          annotation,
+        )}. Please ensure the file's annotationn inclue the following tag: "@${tagTitle}"`,
+      );
+    }
+    return targetTag.name;
+  };
+
+  private static extractNameAndResponsibilities = (
+    documentHeader: string,
+  ): {
+    name: CRCCardDataType['name'];
+    responsibilities?: CRCCardDataType['responsibilities'];
+  } => {
+    const annotation = parse(documentHeader, {
+      unwrap: true,
+    });
+
+    return { name: CRCParser.extractTagFromAnnotation(annotation, 'name') };
+  };
+
+  private static extractCollaborators = (documentBody: string): string[] => {
+    return ImportParser(documentBody)
+      .map(({ importList }: { importList: string[] }) => importList)
+      .flat();
+  };
+
+  public static extractCRCData = (documentText: string): ?CRCCardDataType => {
+    const { header, body } = CRCParser.preparseDocument(documentText);
+    if (!header) {
+      return null;
+    }
+
+    return {
+      ...CRCParser.extractNameAndResponsibilities(header),
+      collaborators: CRCParser.extractCollaborators(body),
+    };
+  };
+}
+
 export class CRCCardsGenerator {
+  private static readFile = async (fileUri: vscode.Uri) => {
+    const document = await vscode.workspace.openTextDocument(fileUri.path);
+    return document.getText();
+  };
+
   public static generateCRCCards = async (fileUris: vscode.Uri[]) => {
-    const nodes = await Promise.all(
+    const crcCards = await Promise.all(
       fileUris.map(async (fileUri: vscode.Uri) => {
-        const projectDocument = await vscode.workspace.openTextDocument(
-          fileUri.path,
-        );
-        const text = projectDocument.getText();
-        // TODO: Use a cleaner way to ignore file body and keep header
-        const [header, body] = text.split('**/');
-        if (!body) {
-          // the file actually has no header so we break
-          return;
-        }
-        const ast = parse(header, {
-          unwrap: true,
-        });
+        const documentText = await CRCCardsGenerator.readFile(fileUri);
 
-        const nameTag = ast.tags.find(({ title }) => title === 'name');
-        if (!nameTag || !nameTag.name) {
-          console.log(fileUri.path);
-          console.log(`No name tag for component: ${ast}`);
-          return;
-        }
-
-        const collaborators = ImportParser(body)
-          .map(({ importList }: { importList: string[] }) => importList)
-          .flat();
-        console.log(collaborators);
-
-        return {
-          data: { id: nameTag.name, label: nameTag.name },
-          collaborators,
-        };
+        return CRCParser.extractCRCData(documentText);
       }),
     );
-    return nodes.filter((node) => !!node);
+    return crcCards.filter((crcCard) => !!crcCard);
   };
 }
