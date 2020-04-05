@@ -34,7 +34,6 @@ export const activate = (context: vscode.ExtensionContext) => {
       { enableScripts: true },
     );
 
-    // const nodes: NodeType[] = [];
     const fileUris = await vscode.workspace.findFiles(
       'src/**/*.{ts,js,tsx,jsx}',
       '**/node_modules/**',
