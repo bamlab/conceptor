@@ -57,8 +57,8 @@ export class ConceptionGraphGenerator {
     const nodes = crcCards.map((crcCard) => ({
       data: { id: crcCard.name, label: crcCard.name },
     }));
-    const edges = crcCards
-      .map((crcCard: CRCCard) => {
+    const edges = crcCards.reduce<EdgeType[]>(
+      (edges: EdgeType[], crcCard: CRCCard) => {
         const collaborationEdges: EdgeType[] = [];
         crcCard.collaborators?.forEach((collaborator: string) => {
           if (
@@ -74,10 +74,11 @@ export class ConceptionGraphGenerator {
               },
             });
           }
-        });
-        return collaborationEdges;
-      })
-      .flat();
+        }, []);
+        return [...edges, ...collaborationEdges];
+      },
+      [],
+    );
 
     return getWebviewContent(nodes, edges);
   }
