@@ -10,6 +10,7 @@
 import * as vscode from 'vscode';
 import { CRCCardsGenerator } from './CRCCardsGenerator';
 import { ConceptionGraphGenerator } from './ConceptionGraphGenerator';
+import { CRCCard } from './types/model';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -39,7 +40,9 @@ export const activate = (context: vscode.ExtensionContext) => {
       '**/node_modules/**',
     );
 
-    const crcCards = await CRCCardsGenerator.generateCRCCards(fileUris);
+    const crcCards = (await CRCCardsGenerator.generateCRCCards(
+      fileUris,
+    )) as CRCCard[];
 
     panel.webview.html = await ConceptionGraphGenerator.generateConceptionGraph(
       crcCards,

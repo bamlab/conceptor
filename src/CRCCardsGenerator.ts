@@ -91,6 +91,5 @@ export class CRCCardsGenerator {
       ),
       null,
     );
-    // .filter((crcCard) => !!crcCard),
   };
 }
