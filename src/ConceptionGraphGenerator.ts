@@ -82,7 +82,7 @@ export class ConceptionGraphGenerator {
     const edges = ConceptionGraphGenerator.createEdges(crcCards);
 
     return compileTemplate('./src/templates/WebviewPanel.template.html', {
-      dependency: `<script src="${dependencies[0]}"></script>`,
+      dependencies,
       script: await ConceptionGraphGenerator.compileGraphScript(nodes, edges),
     });
   };
