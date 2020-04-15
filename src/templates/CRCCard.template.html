@@ -1,13 +1,13 @@
-<h2><%- name %></h2>
+<h2><%- data.name %></h2>
 <ul>
-  <% if (responsibilities) { %> <%
-  responsibilities.forEach(function(responsibility){ %>
+  <% if (data.responsibilities) { %> <%
+  data.responsibilities.forEach(function(responsibility){ %>
   <li><%- responsibility %></li>
   <% }); %> <% } %>
 </ul>
 <style>
   .crc_content {
     color: black;
-    max-width: 200px;
+    max-width: <%- style.width %>px;
   }
 </style>

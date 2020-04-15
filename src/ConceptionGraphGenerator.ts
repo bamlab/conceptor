@@ -39,8 +39,11 @@ export class ConceptionGraphGenerator {
           content: await compileTemplate(
             './src/templates/CRCCard.template.html',
             {
-              name: crcCard.name,
-              responsibilities: crcCard.responsibilities,
+              data: {
+                name: crcCard.name,
+                responsibilities: crcCard.responsibilities,
+              },
+              style: style.crcCard,
             },
           ),
         },
