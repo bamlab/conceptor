@@ -362,6 +362,11 @@ cross-spawn@^6.0.5:
     shebang-command "^1.2.0"
     which "^1.2.9"
 
+cytoscape-node-html-label@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/cytoscape-node-html-label/-/cytoscape-node-html-label-1.2.0.tgz#584bb5a222a3a566348e8958dcde2961bb6967ac"
+  integrity sha512-89gV88cj2fUgzR0sGV/ZWP+KgVusyE8Xb45BusI2vIggWr2V/HZXPeFzupWskLagD/Ky23TcxEgI3fmKQbAyDw==
+
 debug@3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/debug/-/debug-3.1.0.tgz#5bb5a0672628b64149566ba16819e61518c67261"
