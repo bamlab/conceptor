@@ -1,14 +1,10 @@
-const UNIT = 10;
-const CARD_HEADER_HEIGHT = 14 * UNIT;
-const CARD_HEADER_WIDTH = 20 * UNIT;
-
 const style = [
   {
     selector: 'node',
     style: {
       shape: 'round-rectangle',
-      height: CARD_HEADER_HEIGHT,
-      width: CARD_HEADER_WIDTH,
+      height: <%- style.crcCard.height %>,
+      width: <%- style.crcCard.width %>,
       color: 'red',
       'background-color': 'white',
       'text-halign': 'center',
@@ -19,7 +15,7 @@ const style = [
     selector: '[id *= ":title"]',
     style: {
       label: 'data(label)',
-      'font-size': 2 * UNIT,
+      'font-size': 20,
       'text-halign': 'center',
       'text-valign': 'center',
     },
@@ -28,7 +24,7 @@ const style = [
     selector: '[id *= ":responsibility"]',
     style: {
       label: 'data(label)',
-      'font-size': UNIT,
+      'font-size': 20,
     },
   },
   {

@@ -9,6 +9,13 @@ import { compileTemplate } from './utils';
 import { CRCCard } from './types/model';
 import { NodeType, EdgeType } from './types/view';
 
+const style = {
+  crcCard: {
+    height: 140,
+    width: 200,
+  },
+};
+
 export class ConceptionGraphGenerator {
   private static loadDependencies = (
     panel: vscode.WebviewPanel,
@@ -68,6 +75,7 @@ export class ConceptionGraphGenerator {
     compileTemplate('./src/templates/CRCGraph.template.js', {
       nodes,
       edges,
+      style,
     });
 
   public static withConceptionGraph = (crcCards: CRCCard[]) => async (
