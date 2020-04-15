@@ -27,20 +27,13 @@ class CRCParser {
     };
   };
 
-  private static extractTagFromAnnotation = (
+  private static extractTagsFromAnnotation = (
     annotation: Annotation,
     tagTitle: Tag['title'],
-  ) => {
-    const targetTag = annotation.tags.find(({ title }) => title === tagTitle);
-    if (!targetTag || !targetTag.name) {
-      throw new Error(
-        `Cannot extract document name from document annotation: ${JSON.stringify(
-          annotation,
-        )}. Please ensure the file's annotationn inclue the following tag: "@${tagTitle}"`,
-      );
-    }
-    return targetTag.name;
-  };
+  ) =>
+    annotation.tags
+      .filter(({ title }) => title === tagTitle)
+      .map(({ name, description }) => name || description);
 
   private static extractNameAndResponsibilities = (
     documentHeader: string,
@@ -52,7 +45,16 @@ class CRCParser {
       unwrap: true,
     });
 
-    return { name: CRCParser.extractTagFromAnnotation(annotation, 'name') };
+    return {
+      name: CRCParser.extractTagsFromAnnotation(
+        annotation,
+        'name',
+      )[0] as string,
+      responsibilities: CRCParser.extractTagsFromAnnotation(
+        annotation,
+        'responsibility',
+      ) as string[],
+    };
   };
 
   private static extractCollaborators = (documentBody: string): string[] => {
@@ -67,8 +69,17 @@ class CRCParser {
       return null;
     }
 
+    const { name, responsibilities } = CRCParser.extractNameAndResponsibilities(
+      header,
+    );
+
+    if (!name) {
+      return null;
+    }
+
     return {
-      ...CRCParser.extractNameAndResponsibilities(header),
+      name,
+      responsibilities,
       collaborators: CRCParser.extractCollaborators(body),
     };
   };
