@@ -44,9 +44,9 @@ export const activate = (context: vscode.ExtensionContext) => {
       fileUris,
     )) as CRCCard[];
 
-    panel.webview.html = await ConceptionGraphGenerator.generateConceptionGraph(
+    panel.webview.html = await ConceptionGraphGenerator.withConceptionGraph(
       crcCards,
-    );
+    )(panel, context);
   });
   context.subscriptions.push(disposable);
 };

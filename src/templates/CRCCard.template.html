@@ -1,0 +1,7 @@
+<h2><%- name %></h2>
+<ul>
+  <% if (responsibilities) { %> <%
+  responsibilities.forEach(function(responsibility){ %>
+  <li><%- responsibility %></li>
+  <% }); %> <% } %>
+</ul>

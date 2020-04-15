@@ -1,7 +1,7 @@
 export interface NodeType {
   data: {
     id: string;
-    label: string;
+    content: string;
   };
 }
 
