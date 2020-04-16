@@ -26,7 +26,9 @@ export const activate = (context: vscode.ExtensionContext) => {
     // The code you place here will be executed every time your command is executed
 
     // Display a message box to the user
-    vscode.window.showInformationMessage('🚀Launching Conceptor ...');
+    vscode.window.showInformationMessage(
+      '🔍 Loading CRC Cards from project sources ...',
+    );
 
     const panel = vscode.window.createWebviewPanel(
       'conceptor.preview',
@@ -44,9 +46,15 @@ export const activate = (context: vscode.ExtensionContext) => {
       fileUris,
     )) as CRCCard[];
 
+    vscode.window.showInformationMessage('🏗Loading Conception Graph...');
+
     panel.webview.html = await ConceptionGraphGenerator.withConceptionGraph(
       crcCards,
     )(panel, context);
+
+    vscode.window.showInformationMessage(
+      '✅ Conception Graph delivered, 🙌 enjoy!',
+    );
   });
   context.subscriptions.push(disposable);
 };
