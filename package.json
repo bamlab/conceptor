@@ -3,6 +3,7 @@
   "displayName": "Conceptor",
   "description": "",
   "version": "0.0.1",
+  "publisher": "guitoof",
   "engines": {
     "vscode": "^1.43.0"
   },
