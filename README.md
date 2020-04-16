@@ -1,65 +1,48 @@
-# conceptor README
+# Conceptor
 
-This is the README for your extension "conceptor". After writing up a brief description, we recommend including the following sections.
+Conceptor is a visualizing tool to help you apprehend technical conception in you software development process.
+It implements the concept of [CRC Cards](http://agilemodeling.com/artifacts/crcModel.htm) and mainly focuses on helping you highlight the concepts of components ["responsibilities"](https://medium.com/@severinperez/writing-flexible-code-with-the-single-responsibility-principle-b71c4f3f883f) and "collaboration" between them.
 
-## Features
+## Prerequisites
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+Supported project languages:
 
-For example if there is an image subfolder under your extension project workspace:
+- Javascript
+- Typescript
 
-\!\[feature X\]\(images/feature-x.png\)
+## Usage
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+### 1. 📝 Document your components
 
-## Requirements
+Use [jsdoc](https://jsdoc.app/) to add the following header to your files:
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+```javascript
+/**
+ * @name MyComponent
+ * @responsibility This component handles on thing
+ * @responsibility This component also handles this other thing
+ **/
+```
 
-## Extension Settings
+### 2. ▶️ Run the "Conceptor"
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+- 💻 Open the Command Palette: `Shift+CMD+P`
+- ⌨️ Type: `Conceptor`
+- ☕️ Wait for it...
+- 🎉Enjoy Technical Conception 😁
 
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: enable/disable this extension
-* `myExtension.thing`: set to `blah` to do something
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
+![Demo](doc/images/demo.png)
 
 ## Release Notes
 
-Users appreciate release notes as you update your extension.
+### 0.0.1
 
-### 1.0.0
+Initial release of Conceptor
 
-Initial release of ...
+---
 
-### 1.0.1
+### Issues ?
 
-Fixed issue #.
+Should you encounter any issue or require some new feature, feel free to post an issue [here](https://github.com/bamlab/conceptor/issues), we'll be happy to take a look at it 😉.
 
-### 1.1.0
-
-Added features X, Y, and Z.
-
------------------------------------------------------------------------------------------------------------
-
-## Working with Markdown
-
-**Note:** You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux)
-* Toggle preview (`Shift+CMD+V` on macOS or `Shift+Ctrl+V` on Windows and Linux)
-* Press `Ctrl+Space` (Windows, Linux) or `Cmd+Space` (macOS) to see a list of Markdown snippets
-
-### For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+**🙌 Enjoy!**
