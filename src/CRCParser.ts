@@ -4,29 +4,13 @@
  **/
 
 import * as vscode from 'vscode';
-import { ConceptionDocumentFormatType, CRCCard } from './types/model';
+import { CRCCard } from './types/model';
 import { parse, Annotation, Tag } from 'doctrine';
 const ImportParser = require('import-parser');
 import { readFile } from './utils/FileSystem';
+import { DocumentParser } from './DocumentParser';
 
 export class CRCParser {
-  private static preparseDocument = (
-    documentText: string,
-  ): ConceptionDocumentFormatType => {
-    // TODO: Use a cleaner way to ignore file body and keep header
-    const [header, body] = documentText.split('**/');
-    if (!body) {
-      // the file actually has no header
-      return {
-        body: header,
-      };
-    }
-    return {
-      header,
-      body,
-    };
-  };
-
   private static extractTagsFromAnnotation = (
     annotation: Annotation,
     tagTitle: Tag['title'],
@@ -66,7 +50,7 @@ export class CRCParser {
   public static extractCRCCard = async (fileUri: vscode.Uri) => {
     const documentText = await readFile(fileUri);
 
-    const { header, body } = CRCParser.preparseDocument(documentText);
+    const { header, body } = DocumentParser.preparseDocument(documentText);
     if (!header) {
       return null;
     }
