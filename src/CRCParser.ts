@@ -3,9 +3,11 @@
  * @responsibility Parse document to extract CRC information
  **/
 
+import * as vscode from 'vscode';
 import { ConceptionDocumentFormatType, CRCCard } from './types/model';
 import { parse, Annotation, Tag } from 'doctrine';
 const ImportParser = require('import-parser');
+import { readFile } from './utils/FileSystem';
 
 export class CRCParser {
   private static preparseDocument = (
@@ -61,7 +63,9 @@ export class CRCParser {
       .flat();
   };
 
-  public static extractCRCCard = (documentText: string) => {
+  public static extractCRCCard = async (fileUri: vscode.Uri) => {
+    const documentText = await readFile(fileUri);
+
     const { header, body } = CRCParser.preparseDocument(documentText);
     if (!header) {
       return null;
