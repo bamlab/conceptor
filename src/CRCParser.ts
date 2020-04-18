@@ -5,9 +5,8 @@
 
 import * as vscode from 'vscode';
 import { CRCCard } from './types/model';
-import { parse, Annotation, Tag } from 'doctrine';
+import { Annotation, Tag } from 'doctrine';
 const ImportParser = require('import-parser');
-import { readFile } from './utils/FileSystem';
 import { DocumentParser } from './DocumentParser';
 
 export class CRCParser {
@@ -20,15 +19,11 @@ export class CRCParser {
       .map(({ name, description }) => name || description);
 
   private static extractNameAndResponsibilities = (
-    documentHeader: string,
+    annotation: Annotation,
   ): {
     name: CRCCard['name'];
     responsibilities?: CRCCard['responsibilities'];
   } => {
-    const annotation = parse(documentHeader, {
-      unwrap: true,
-    });
-
     return {
       name: CRCParser.extractTagsFromAnnotation(
         annotation,
@@ -48,15 +43,13 @@ export class CRCParser {
   };
 
   public static extractCRCCard = async (fileUri: vscode.Uri) => {
-    const documentText = await readFile(fileUri);
-
-    const { header, body } = DocumentParser.preparseDocument(documentText);
-    if (!header) {
+    const { annotation, body } = await DocumentParser.parse(fileUri);
+    if (!annotation) {
       return null;
     }
 
     const { name, responsibilities } = CRCParser.extractNameAndResponsibilities(
-      header,
+      annotation,
     );
 
     if (!name) {
