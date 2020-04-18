@@ -9,7 +9,7 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 import { CRCCardsGenerator } from './CRCCardsGenerator';
-import { ConceptionGraphGenerator } from './ConceptionGraphGenerator';
+import { ConceptionGraphGenerator } from './view/ConceptionGraphGenerator';
 import { CRCCard } from './types/model';
 
 // this method is called when your extension is activated
