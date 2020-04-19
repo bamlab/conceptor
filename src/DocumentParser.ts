@@ -4,7 +4,7 @@
  **/
 
 import * as vscode from 'vscode';
-import { parse, Annotation } from 'doctrine';
+import { parse, Annotation, Tag } from 'doctrine';
 import { ConceptionDocumentFormatType } from './types/model';
 import { readFile } from './utils/FileSystem';
 const ImportParser = require('import-parser');
@@ -44,6 +44,14 @@ export class DocumentParser {
       return [];
     }
   };
+
+  public static extractTagsFromAnnotation = (
+    annotation: Annotation,
+    tagTitle: Tag['title'],
+  ) =>
+    annotation.tags
+      .filter(({ title }) => title === tagTitle)
+      .map(({ name, description }) => name || description);
 
   public static parse = async (
     fileUri: vscode.Uri,
