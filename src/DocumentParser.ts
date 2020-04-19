@@ -9,7 +9,7 @@ import { ConceptionDocumentFormatType } from './types/model';
 import { readFile } from './utils/FileSystem';
 const ImportParser = require('import-parser');
 
-interface ConceptionDocument {
+export interface ConceptionDocument {
   name?: string;
   annotation?: Annotation;
   imports: Import[];
@@ -34,6 +34,9 @@ export class DocumentParser {
     };
   };
 
+  private static extractFileName = (fileUri: vscode.Uri) =>
+    fileUri.path.split('/').pop();
+
   private static parseImportStatements = (documentBody: string): Import[] => {
     try {
       return ImportParser(documentBody);
@@ -53,6 +56,7 @@ export class DocumentParser {
         })
       : undefined;
     return {
+      name: DocumentParser.extractFileName(fileUri),
       annotation,
       imports: DocumentParser.parseImportStatements(body),
       body,
