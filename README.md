@@ -24,6 +24,8 @@ Use [jsdoc](https://jsdoc.app/) to add the following header to your files:
  **/
 ```
 
+Note that the `@name` tag is optional. If not provided, the component name will be infered from the filename.
+
 ### 2. ▶️ Run the "Conceptor"
 
 - 💻 Open the Command Palette: `Shift+CMD+P`
@@ -38,6 +40,10 @@ Use [jsdoc](https://jsdoc.app/) to add the following header to your files:
 ### 0.0.1
 
 Initial release of Conceptor
+
+### 0.1.0 🚧
+
+- Infer component name from file name if no annotation is provided
 
 ---
 
