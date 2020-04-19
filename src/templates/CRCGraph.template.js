@@ -41,6 +41,9 @@ var cy = cytoscape({
       nodes: [<%- nodes.map(JSON.stringify).join(',') %>],
       edges: [<%- edges.map(JSON.stringify).join(',') %>]
   },
+  <% if (layout) { %>
+    layout: { name: <%- JSON.stringify(layout) %> },
+  <% } %>
   style: style
 });
 
