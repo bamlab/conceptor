@@ -41,10 +41,11 @@ Note that the `@name` tag is optional. If not provided, the component name will 
 
 Initial release of Conceptor
 
-### 0.1.0 🚧
+### 0.1.0
 
 - Infer component name from file name if no annotation is provided
 - Provide include/ignore file patterns configurability
+- Provide conception graph layout configurability
 
 ---
 
