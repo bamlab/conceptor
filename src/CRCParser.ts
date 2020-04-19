@@ -6,18 +6,22 @@
 import * as vscode from 'vscode';
 import { Annotation } from 'doctrine';
 import { DocumentParser, ConceptionDocument } from './DocumentParser';
+import { ConnectOpts } from 'net';
 
 export class CRCParser {
-  private static extractName = ({ name, annotation }: ConceptionDocument) => {
-    const documentName = name?.split('.')[0];
-    if (!annotation) {
-      return documentName;
-    }
-    return (
-      DocumentParser.extractTagsFromAnnotation(annotation, 'name')[0] ||
-      documentName
-    );
-  };
+  private static extractNameFromDocumentName = ({ name }: ConceptionDocument) =>
+    name?.split('.')[0];
+
+  private static extractNameFromAnnotation = ({
+    annotation,
+  }: ConceptionDocument) =>
+    annotation
+      ? DocumentParser.extractTagsFromAnnotation(annotation, 'name')[0]
+      : undefined;
+
+  private static extractName = (document: ConceptionDocument) =>
+    CRCParser.extractNameFromAnnotation(document) ||
+    CRCParser.extractNameFromDocumentName(document);
 
   private static extractResponsibilities = (annotation?: Annotation) =>
     annotation
