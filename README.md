@@ -44,6 +44,7 @@ Initial release of Conceptor
 ### 0.1.0 🚧
 
 - Infer component name from file name if no annotation is provided
+- Provide include/ignore file patterns configurability
 
 ---
 

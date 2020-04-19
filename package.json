@@ -21,7 +21,22 @@
         "command": "conceptor",
         "title": "Conceptor"
       }
-    ]
+    ],
+    "configuration": {
+      "title": "Conceptor",
+      "properties": {
+        "conceptor.includeFilePatterns": {
+          "type": "string",
+          "default": "src/**/*.{ts,js,tsx,jsx}",
+          "description": "Pattern for files to include when building the conception graph"
+        },
+        "conceptor.ignoreFilePatterns": {
+          "type": "string",
+          "default": "",
+          "description": "Pattern for files to ignore when building the conception graph"
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "yarn run compile",
