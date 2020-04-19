@@ -1,16 +1,18 @@
 /**
  * @name DocumentParser
- * @responsibility Parse document for information and transform into an analyzable object
+ * @responsibility Parse document for information and transform into an analyzable ConceptionDocument
  **/
 
 import * as vscode from 'vscode';
 import { parse, Annotation } from 'doctrine';
 import { ConceptionDocumentFormatType } from './types/model';
 import { readFile } from './utils/FileSystem';
+const ImportParser = require('import-parser');
 
 interface ConceptionDocument {
   name?: string;
   annotation?: Annotation;
+  imports: Import[];
   body: string;
 }
 
@@ -32,6 +34,14 @@ export class DocumentParser {
     };
   };
 
+  private static parseImportStatements = (documentBody: string): Import[] => {
+    try {
+      return ImportParser(documentBody);
+    } catch {
+      return [];
+    }
+  };
+
   public static parse = async (
     fileUri: vscode.Uri,
   ): Promise<ConceptionDocument> => {
@@ -44,6 +54,7 @@ export class DocumentParser {
       : undefined;
     return {
       annotation,
+      imports: DocumentParser.parseImportStatements(body),
       body,
     };
   };

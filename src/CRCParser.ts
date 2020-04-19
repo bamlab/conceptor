@@ -6,7 +6,6 @@
 import * as vscode from 'vscode';
 import { CRCCard } from './types/model';
 import { Annotation, Tag } from 'doctrine';
-const ImportParser = require('import-parser');
 import { DocumentParser } from './DocumentParser';
 
 export class CRCParser {
@@ -36,14 +35,14 @@ export class CRCParser {
     };
   };
 
-  private static extractCollaborators = (documentBody: string): string[] => {
-    return ImportParser(documentBody)
-      .map(({ importList }: { importList: string[] }) => importList)
-      .flat();
-  };
+  private static extractCollaborators = (imports: Import[]) =>
+    imports.reduce<string[]>(
+      (allImports, { importList }) => [...allImports, ...importList],
+      [],
+    );
 
   public static extractCRCCard = async (fileUri: vscode.Uri) => {
-    const { annotation, body } = await DocumentParser.parse(fileUri);
+    const { annotation, imports } = await DocumentParser.parse(fileUri);
     if (!annotation) {
       return null;
     }
@@ -59,7 +58,7 @@ export class CRCParser {
     return {
       name,
       responsibilities,
-      collaborators: CRCParser.extractCollaborators(body),
+      collaborators: CRCParser.extractCollaborators(imports),
     };
   };
 }
