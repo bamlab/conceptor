@@ -34,6 +34,11 @@
           "type": "string",
           "default": "",
           "description": "Pattern for files to ignore when building the conception graph"
+        },
+        "conceptor.conceptionGraphLayout": {
+          "type": "string",
+          "default": "cose",
+          "description": "Conception Graph Layout (values can be one of those described here: https://js.cytoscape.org/#layouts)"
         }
       }
     }
