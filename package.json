@@ -76,5 +76,12 @@
     "ejs": "^3.0.2",
     "import-parser": "^0.0.2",
     "lodash": "^4.4.0"
+  },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "<rootDir>/node_modules/",
+      "<rootDir>/out/test/suite/",
+      "<rootDir>/src/test/suite/"
+    ]
   }
 }
