@@ -2,7 +2,7 @@
   "name": "conceptor",
   "displayName": "Conceptor",
   "description": "",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "repository": "https://github.com/bamlab/conceptor",
   "publisher": "guitoof",
   "engines": {
@@ -21,7 +21,27 @@
         "command": "conceptor",
         "title": "Conceptor"
       }
-    ]
+    ],
+    "configuration": {
+      "title": "Conceptor",
+      "properties": {
+        "conceptor.includeFilePatterns": {
+          "type": "string",
+          "default": "src/**/*.{ts,js,tsx,jsx}",
+          "description": "Pattern for files to include when building the conception graph"
+        },
+        "conceptor.ignoreFilePatterns": {
+          "type": "string",
+          "default": "",
+          "description": "Pattern for files to ignore when building the conception graph"
+        },
+        "conceptor.conceptionGraphLayout": {
+          "type": "string",
+          "default": "cose",
+          "description": "Conception Graph Layout (values can be one of those described here: https://js.cytoscape.org/#layouts)"
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "yarn run compile",

@@ -6,8 +6,9 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import { compileTemplate } from './utils';
-import { CRCCard } from './types/model';
-import { NodeType, EdgeType } from './types/view';
+import { CRCCard } from '../types/model';
+import { NodeType, EdgeType } from '../types/view';
+import { ConfigurationManager } from './ConfigurationManager';
 
 const style = {
   crcCard: {
@@ -79,6 +80,7 @@ export class ConceptionGraphGenerator {
       nodes,
       edges,
       style,
+      layout: ConfigurationManager.getConceptionGraphLayout(),
     });
 
   public static withConceptionGraph = (crcCards: CRCCard[]) => async (
