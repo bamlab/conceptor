@@ -35,17 +35,7 @@ Note that the `@name` tag is optional. If not provided, the component name will 
 
 ![Demo](doc/images/demo.png)
 
-## Release Notes
-
-### 0.0.1
-
-Initial release of Conceptor
-
-### 0.1.0
-
-- Infer component name from file name if no annotation is provided
-- Provide include/ignore file patterns configurability
-- Provide conception graph layout configurability
+## [Release Notes](./CHANGELOG.md)
 
 ---
 
