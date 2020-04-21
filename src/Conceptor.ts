@@ -23,6 +23,9 @@ export class Conceptor {
       vscode.ViewColumn.Eight,
       { enableScripts: true },
     );
+
+    // Register lifecycle listeners
+    vscode.workspace.onDidSaveTextDocument(this.buildConceptionGraph);
   }
 
   private static findFiles = async () =>
