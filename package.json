@@ -38,7 +38,27 @@
         "conceptor.conceptionGraphLayout": {
           "type": "string",
           "default": "cose",
-          "description": "Conception Graph Layout (values can be one of those described here: https://js.cytoscape.org/#layouts)"
+          "description": "Conception Graph Layout (values can be one of those described here: https://js.cytoscape.org/#layouts)",
+          "enum": [
+            "null",
+            "random",
+            "preset",
+            "grid",
+            "circle",
+            "concentric",
+            "breadthfirst",
+            "cose"
+          ],
+          "enumDescriptions": [
+            "https://js.cytoscape.org/#layouts/null",
+            "https://js.cytoscape.org/#layouts/random",
+            "https://js.cytoscape.org/#layouts/preset",
+            "https://js.cytoscape.org/#layouts/grid",
+            "https://js.cytoscape.org/#layouts/circle",
+            "https://js.cytoscape.org/#layouts/concentric",
+            "https://js.cytoscape.org/#layouts/breadthfirst",
+            "https://js.cytoscape.org/#layouts/cose"
+          ]
         }
       }
     }
