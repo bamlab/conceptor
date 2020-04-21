@@ -47,7 +47,7 @@ export const activate = (context: vscode.ExtensionContext) => {
     )(panel, context);
 
     vscode.window.showInformationMessage(
-      '✅ Conception Graph delivered, 🙌 enjoy!',
+      '✅ Conception Graph ready, 🙌 enjoy!',
     );
   });
   context.subscriptions.push(disposable);
