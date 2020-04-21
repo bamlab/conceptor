@@ -53,6 +53,7 @@
     "test": "node ./out/test/runTest.js"
   },
   "devDependencies": {
+    "@babel/preset-typescript": "^7.9.0",
     "@types/doctrine": "^0.0.3",
     "@types/ejs": "^3.0.2",
     "@types/glob": "^7.1.1",
