@@ -83,6 +83,12 @@
       "<rootDir>/node_modules/",
       "<rootDir>/out/test/suite/",
       "<rootDir>/src/test/suite/"
+    ],
+    "collectCoverageFrom": [
+      "**/*.{ts,tsx}",
+      "!**/src/test/**",
+      "!**/types/**",
+      "!**/node_modules/**"
     ]
   }
 }
