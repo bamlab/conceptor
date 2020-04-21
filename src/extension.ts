@@ -1,17 +1,15 @@
 /**
  * @name extension
  * @description Conceptor Extension entry point
- * @responsibility Create the extension panel
- * @responsibility List project files for which Conception may be relevant
+ * @responsibility Register the "conceptor" command
+ * @responsibility Request the build of the Conception Graph
+ * @responsibility Display message to let the user know it's ready
  **/
 
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
-import { CRCCardsGenerator } from './CRCCardsGenerator';
-import { ConceptionGraphGenerator } from './view/ConceptionGraphGenerator';
-import { CRCCard } from './types/model';
-import { ConfigurationManager } from './view/ConfigurationManager';
+import { Conceptor } from './Conceptor';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -26,25 +24,8 @@ export const activate = (context: vscode.ExtensionContext) => {
   let disposable = vscode.commands.registerCommand('conceptor', async () => {
     // The code you place here will be executed every time your command is executed
 
-    const panel = vscode.window.createWebviewPanel(
-      'conceptor.preview',
-      'Conceptor',
-      vscode.ViewColumn.Eight,
-      { enableScripts: true },
-    );
-
-    const fileUris = await vscode.workspace.findFiles(
-      ConfigurationManager.getIncludeFilePatterns(),
-      ConfigurationManager.getIgnoreFilePatterns(),
-    );
-
-    const crcCards = (await CRCCardsGenerator.generateCRCCards(
-      fileUris,
-    )) as CRCCard[];
-
-    panel.webview.html = await ConceptionGraphGenerator.withConceptionGraph(
-      crcCards,
-    )(panel, context);
+    const conceptor = new Conceptor(context);
+    await conceptor.buildConceptionGraph();
 
     vscode.window.showInformationMessage(
       '✅ Conception Graph ready, 🙌 enjoy!',
