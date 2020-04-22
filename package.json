@@ -48,12 +48,10 @@
     "compile": "tsc -p ./",
     "lint": "eslint src --ext ts",
     "watch": "tsc -watch -p ./",
-    "test:unit": "jest",
     "pretest": "yarn run compile && yarn run lint",
     "test": "node ./out/test/runTest.js"
   },
   "devDependencies": {
-    "@babel/preset-typescript": "^7.9.0",
     "@types/doctrine": "^0.0.3",
     "@types/ejs": "^3.0.2",
     "@types/glob": "^7.1.1",
@@ -75,18 +73,5 @@
     "ejs": "^3.0.2",
     "import-parser": "^0.0.2",
     "lodash": "^4.4.0"
-  },
-  "jest": {
-    "testPathIgnorePatterns": [
-      "<rootDir>/node_modules/",
-      "<rootDir>/out/test/suite/",
-      "<rootDir>/src/test/suite/"
-    ],
-    "collectCoverageFrom": [
-      "**/*.{ts,tsx}",
-      "!**/src/test/**",
-      "!**/types/**",
-      "!**/node_modules/**"
-    ]
   }
 }
