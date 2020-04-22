@@ -2,7 +2,7 @@
   "name": "conceptor",
   "displayName": "Conceptor",
   "description": "",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "repository": "https://github.com/bamlab/conceptor",
   "publisher": "guitoof",
   "engines": {
@@ -38,7 +38,27 @@
         "conceptor.conceptionGraphLayout": {
           "type": "string",
           "default": "cose",
-          "description": "Conception Graph Layout (values can be one of those described here: https://js.cytoscape.org/#layouts)"
+          "description": "Conception Graph Layout (values can be one of those described here: https://js.cytoscape.org/#layouts)",
+          "enum": [
+            "null",
+            "random",
+            "preset",
+            "grid",
+            "circle",
+            "concentric",
+            "breadthfirst",
+            "cose"
+          ],
+          "enumDescriptions": [
+            "https://js.cytoscape.org/#layouts/null",
+            "https://js.cytoscape.org/#layouts/random",
+            "https://js.cytoscape.org/#layouts/preset",
+            "https://js.cytoscape.org/#layouts/grid",
+            "https://js.cytoscape.org/#layouts/circle",
+            "https://js.cytoscape.org/#layouts/concentric",
+            "https://js.cytoscape.org/#layouts/breadthfirst",
+            "https://js.cytoscape.org/#layouts/cose"
+          ]
         }
       }
     }
@@ -48,13 +68,16 @@
     "compile": "tsc -p ./",
     "lint": "eslint src --ext ts",
     "watch": "tsc -watch -p ./",
+    "test:unit": "jest",
     "pretest": "yarn run compile && yarn run lint",
     "test": "node ./out/test/runTest.js"
   },
   "devDependencies": {
+    "@babel/preset-typescript": "^7.9.0",
     "@types/doctrine": "^0.0.3",
     "@types/ejs": "^3.0.2",
     "@types/glob": "^7.1.1",
+    "@types/jest": "^25.2.1",
     "@types/lodash": "^4.4.6",
     "@types/mocha": "^7.0.1",
     "@types/node": "^12.11.7",
@@ -63,6 +86,7 @@
     "@typescript-eslint/parser": "^2.18.0",
     "eslint": "^6.8.0",
     "glob": "^7.1.6",
+    "jest": "^25.4.0",
     "mocha": "^7.0.1",
     "typescript": "^3.7.5",
     "vscode-test": "^1.3.0"
@@ -73,5 +97,18 @@
     "ejs": "^3.0.2",
     "import-parser": "^0.0.2",
     "lodash": "^4.4.0"
+  },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "<rootDir>/node_modules/",
+      "<rootDir>/out/test/suite/",
+      "<rootDir>/src/test/suite/"
+    ],
+    "collectCoverageFrom": [
+      "**/*.{ts,tsx}",
+      "!**/src/test/**",
+      "!**/types/**",
+      "!**/node_modules/**"
+    ]
   }
 }
