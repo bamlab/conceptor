@@ -65,7 +65,8 @@
   },
   "scripts": {
     "vscode:prepublish": "yarn run compile",
-    "compile": "tsc -p ./",
+    "compile": "tsc -p ./ && yarn run copyTemplates",
+    "copyTemplates": "copyfiles -u 1 src/templates/*.html src/templates/*.js out/",
     "lint": "eslint src --ext ts",
     "watch": "tsc -watch -p ./",
     "pretest": "yarn run compile && yarn run lint",
@@ -82,6 +83,7 @@
     "@types/vscode": "^1.43.0",
     "@typescript-eslint/eslint-plugin": "^2.18.0",
     "@typescript-eslint/parser": "^2.18.0",
+    "copyfiles": "^2.2.0",
     "eslint": "^6.8.0",
     "glob": "^7.1.6",
     "mocha": "^7.0.1",
