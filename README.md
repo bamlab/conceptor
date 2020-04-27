@@ -1,6 +1,6 @@
 # Conceptor
 
-Conceptor is a visualizing tool to help you apprehend technical conception in you software development process.
+Conceptor is a visualizing tool to help you apprehend technical design in you software development process.
 It implements the concept of [CRC Cards](http://agilemodeling.com/artifacts/crcModel.htm) and mainly focuses on helping you highlight the concepts of components ["responsibilities"](https://medium.com/@severinperez/writing-flexible-code-with-the-single-responsibility-principle-b71c4f3f883f) and "collaboration" between them.
 
 ## Prerequisites
@@ -31,7 +31,7 @@ Note that the `@name` tag is optional. If not provided, the component name will 
 - 💻 Open the Command Palette: `Shift+CMD+P`
 - ⌨️ Type: `Conceptor`
 - ☕️ Wait for it...
-- 🎉Enjoy Technical Conception 😁
+- 🎉Enjoy Technical Design 😁
 
 ![Demo](doc/images/demo.png)
 

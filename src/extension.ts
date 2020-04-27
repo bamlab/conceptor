@@ -2,7 +2,7 @@
  * @name extension
  * @description Conceptor Extension entry point
  * @responsibility Register the "conceptor" command
- * @responsibility Request the build of the Conception Graph
+ * @responsibility Request the build of the Design Graph
  * @responsibility Display message to let the user know it's ready
  **/
 
@@ -25,11 +25,9 @@ export const activate = (context: vscode.ExtensionContext) => {
     // The code you place here will be executed every time your command is executed
 
     const conceptor = new Conceptor(context);
-    await conceptor.buildConceptionGraph();
+    await conceptor.buildDesignGraph();
 
-    vscode.window.showInformationMessage(
-      '✅ Conception Graph ready, 🙌 enjoy!',
-    );
+    vscode.window.showInformationMessage('✅ Design Graph ready, 🙌 enjoy!');
   });
   context.subscriptions.push(disposable);
 };

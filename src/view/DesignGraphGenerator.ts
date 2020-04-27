@@ -1,6 +1,6 @@
 /**
- * @name ConceptionGraphGenerator
- * @responsibility Generates a Conception graph given a set of CRC Cards
+ * @name DesignGraphGenerator
+ * @responsibility Generates a Design graph given a set of CRC Cards
  **/
 
 import * as vscode from 'vscode';
@@ -17,7 +17,7 @@ const style = {
   },
 };
 
-export class ConceptionGraphGenerator {
+export class DesignGraphGenerator {
   private static loadDependencies = (
     panel: vscode.WebviewPanel,
     context: vscode.ExtensionContext,
@@ -37,16 +37,13 @@ export class ConceptionGraphGenerator {
       crcCards.map(async (crcCard) => ({
         data: {
           id: `CRCCard:${crcCard.name}`,
-          content: await compileTemplate(
-            './src/templates/CRCCard.template.html',
-            {
-              data: {
-                name: crcCard.name,
-                responsibilities: crcCard.responsibilities,
-              },
-              style: style.crcCard,
+          content: await compileTemplate('crc-card.html', {
+            data: {
+              name: crcCard.name,
+              responsibilities: crcCard.responsibilities,
             },
-          ),
+            style: style.crcCard,
+          }),
         },
       })),
     );
@@ -76,27 +73,24 @@ export class ConceptionGraphGenerator {
     nodes: NodeType[],
     edges: EdgeType[],
   ) =>
-    compileTemplate('./src/templates/CRCGraph.template.js', {
+    compileTemplate('main.js', {
       nodes,
       edges,
       style,
-      layout: ConfigurationManager.getConceptionGraphLayout(),
+      layout: ConfigurationManager.getDesignGraphLayout(),
     });
 
-  public static withConceptionGraph = (crcCards: CRCCard[]) => async (
+  public static withDesignGraph = (crcCards: CRCCard[]) => async (
     panel: vscode.WebviewPanel,
     context: vscode.ExtensionContext,
   ) => {
-    const dependencies = ConceptionGraphGenerator.loadDependencies(
-      panel,
-      context,
-    );
-    const nodes = await ConceptionGraphGenerator.createNodes(crcCards);
-    const edges = ConceptionGraphGenerator.createEdges(crcCards);
+    const dependencies = DesignGraphGenerator.loadDependencies(panel, context);
+    const nodes = await DesignGraphGenerator.createNodes(crcCards);
+    const edges = DesignGraphGenerator.createEdges(crcCards);
 
-    return compileTemplate('./src/templates/WebviewPanel.template.html', {
+    return compileTemplate('index.html', {
       dependencies,
-      script: await ConceptionGraphGenerator.compileGraphScript(nodes, edges),
+      script: await DesignGraphGenerator.compileGraphScript(nodes, edges),
     });
   };
 }
