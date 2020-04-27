@@ -66,7 +66,7 @@
   "scripts": {
     "vscode:prepublish": "yarn run compile",
     "compile": "tsc -p ./ && yarn run copyTemplates",
-    "copyTemplates": "copyfiles -u 1 src/templates/*.html src/templates/*.js out/",
+    "copyTemplates": "copyfiles -u 1 src/templates/* out",
     "lint": "eslint src --ext ts",
     "watch": "tsc -watch -p ./",
     "pretest": "yarn run compile && yarn run lint",
