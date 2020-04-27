@@ -28,17 +28,17 @@
         "conceptor.includeFilePatterns": {
           "type": "string",
           "default": "src/**/*.{ts,js,tsx,jsx}",
-          "description": "Pattern for files to include when building the conception graph"
+          "description": "Pattern for files to include when building the design graph"
         },
         "conceptor.ignoreFilePatterns": {
           "type": "string",
           "default": "",
-          "description": "Pattern for files to ignore when building the conception graph"
+          "description": "Pattern for files to ignore when building the design graph"
         },
         "conceptor.conceptionGraphLayout": {
           "type": "string",
           "default": "cose",
-          "description": "Conception Graph Layout (values can be one of those described here: https://js.cytoscape.org/#layouts)",
+          "description": "Design Graph Layout (values can be one of those described here: https://js.cytoscape.org/#layouts)",
           "enum": [
             "null",
             "random",
