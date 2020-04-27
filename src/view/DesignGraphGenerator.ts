@@ -1,6 +1,6 @@
 /**
- * @name ConceptionGraphGenerator
- * @responsibility Generates a Conception graph given a set of CRC Cards
+ * @name DesignGraphGenerator
+ * @responsibility Generates a Design graph given a set of CRC Cards
  **/
 
 import * as vscode from 'vscode';
@@ -17,7 +17,7 @@ const style = {
   },
 };
 
-export class ConceptionGraphGenerator {
+export class DesignGraphGenerator {
   private static loadDependencies = (
     panel: vscode.WebviewPanel,
     context: vscode.ExtensionContext,
@@ -77,23 +77,20 @@ export class ConceptionGraphGenerator {
       nodes,
       edges,
       style,
-      layout: ConfigurationManager.getConceptionGraphLayout(),
+      layout: ConfigurationManager.getDesignGraphLayout(),
     });
 
-  public static withConceptionGraph = (crcCards: CRCCard[]) => async (
+  public static withDesignGraph = (crcCards: CRCCard[]) => async (
     panel: vscode.WebviewPanel,
     context: vscode.ExtensionContext,
   ) => {
-    const dependencies = ConceptionGraphGenerator.loadDependencies(
-      panel,
-      context,
-    );
-    const nodes = await ConceptionGraphGenerator.createNodes(crcCards);
-    const edges = ConceptionGraphGenerator.createEdges(crcCards);
+    const dependencies = DesignGraphGenerator.loadDependencies(panel, context);
+    const nodes = await DesignGraphGenerator.createNodes(crcCards);
+    const edges = DesignGraphGenerator.createEdges(crcCards);
 
     return compileTemplate('index.html', {
       dependencies,
-      script: await ConceptionGraphGenerator.compileGraphScript(nodes, edges),
+      script: await DesignGraphGenerator.compileGraphScript(nodes, edges),
     });
   };
 }

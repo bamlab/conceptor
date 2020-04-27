@@ -5,21 +5,19 @@
 
 import * as vscode from 'vscode';
 import { Annotation } from 'doctrine';
-import { DocumentParser, ConceptionDocument } from './DocumentParser';
+import { DocumentParser, DesignDocument } from './DocumentParser';
 import { ConnectOpts } from 'net';
 
 export class CRCParser {
-  private static extractNameFromDocumentName = ({ name }: ConceptionDocument) =>
+  private static extractNameFromDocumentName = ({ name }: DesignDocument) =>
     name?.split('.')[0];
 
-  private static extractNameFromAnnotation = ({
-    annotation,
-  }: ConceptionDocument) =>
+  private static extractNameFromAnnotation = ({ annotation }: DesignDocument) =>
     annotation
       ? DocumentParser.extractTagsFromAnnotation(annotation, 'name')[0]
       : undefined;
 
-  private static extractName = (document: ConceptionDocument) =>
+  private static extractName = (document: DesignDocument) =>
     CRCParser.extractNameFromAnnotation(document) ||
     CRCParser.extractNameFromDocumentName(document);
 

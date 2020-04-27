@@ -4,7 +4,7 @@ export interface CRCCard {
   collaborators?: string[];
 }
 
-export interface ConceptionDocumentFormatType {
+export interface DesignDocumentFormatType {
   header?: string;
   body: string;
 }

@@ -1,15 +1,15 @@
 /**
  * @name DocumentParser
- * @responsibility Parse document for information and transform into an analyzable ConceptionDocument
+ * @responsibility Parse document for information and transform into an analyzable design Document
  **/
 
 import * as vscode from 'vscode';
 import { parse, Annotation, Tag } from 'doctrine';
-import { ConceptionDocumentFormatType } from './types/model';
+import { DesignDocumentFormatType } from './types/model';
 import { readFile } from './utils/FileSystem';
 const ImportParser = require('import-parser');
 
-export interface ConceptionDocument {
+export interface DesignDocument {
   name?: string;
   annotation?: Annotation;
   imports: Import[];
@@ -19,7 +19,7 @@ export interface ConceptionDocument {
 export class DocumentParser {
   private static preparseDocument = (
     documentText: string,
-  ): ConceptionDocumentFormatType => {
+  ): DesignDocumentFormatType => {
     // TODO: Use a cleaner way to ignore file body and keep header
     const [header, body] = documentText.split('**/');
     if (!body) {
@@ -55,7 +55,7 @@ export class DocumentParser {
 
   public static parse = async (
     fileUri: vscode.Uri,
-  ): Promise<ConceptionDocument> => {
+  ): Promise<DesignDocument> => {
     const documentText = await readFile(fileUri);
     const { header, body } = DocumentParser.preparseDocument(documentText);
     const annotation = header

@@ -10,12 +10,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### 🚑 Fixed
 
 - Fix graph rendering (copy rendering templates during compilation)
+- Rename "Conception" into "Design" for more accuracy
 
 ## [0.2.0] - 2020-04-22
 
 ### 🎉 Added
 
-- Live update the conception graph on each file save
+- Live update the design graph on each file save
 
 ### 🦋 Changed
 
@@ -26,7 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### 🎉 Added
 
 - Provide include/ignore file patterns configurability
-- Provide conception graph layout configurability
+- Provide design graph layout configurability
 
 ### 🦋 Changed
 
