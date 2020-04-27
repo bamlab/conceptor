@@ -1,0 +1,2 @@
+# Do not run Prettier against JavaScript ejs files (https://ejs.co/)
+**/*.js.ejs

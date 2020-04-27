@@ -37,16 +37,13 @@ export class ConceptionGraphGenerator {
       crcCards.map(async (crcCard) => ({
         data: {
           id: `CRCCard:${crcCard.name}`,
-          content: await compileTemplate(
-            './src/templates/CRCCard.template.html',
-            {
-              data: {
-                name: crcCard.name,
-                responsibilities: crcCard.responsibilities,
-              },
-              style: style.crcCard,
+          content: await compileTemplate('crc-card.html', {
+            data: {
+              name: crcCard.name,
+              responsibilities: crcCard.responsibilities,
             },
-          ),
+            style: style.crcCard,
+          }),
         },
       })),
     );
@@ -76,7 +73,7 @@ export class ConceptionGraphGenerator {
     nodes: NodeType[],
     edges: EdgeType[],
   ) =>
-    compileTemplate('./src/templates/CRCGraph.template.js', {
+    compileTemplate('main.js', {
       nodes,
       edges,
       style,
@@ -94,7 +91,7 @@ export class ConceptionGraphGenerator {
     const nodes = await ConceptionGraphGenerator.createNodes(crcCards);
     const edges = ConceptionGraphGenerator.createEdges(crcCards);
 
-    return compileTemplate('./src/templates/WebviewPanel.template.html', {
+    return compileTemplate('index.html', {
       dependencies,
       script: await ConceptionGraphGenerator.compileGraphScript(nodes, edges),
     });
