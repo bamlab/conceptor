@@ -10,6 +10,8 @@ export class ConfigurationManager {
     vscode.workspace.getConfiguration('conceptor')?.includeFilePatterns;
   public static getIgnoreFilePatterns = () =>
     vscode.workspace.getConfiguration('conceptor')?.ignoreFilePatterns;
+  public static shouldOnlyIncludeAnnotatedFiles = () =>
+    vscode.workspace.getConfiguration('conceptor')?.onlyIncludeAnnotatedFiles;
   public static getDesignGraphLayout = () =>
     vscode.workspace.getConfiguration('conceptor')?.designGraphLayout;
 }

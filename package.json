@@ -35,6 +35,11 @@
           "default": "",
           "description": "Pattern for files to ignore when building the design graph"
         },
+        "conceptor.onlyIncludeAnnotatedFiles": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether the design graph should only include annotated files (true) or all project's files (false)"
+        },
         "conceptor.designGraphLayout": {
           "type": "string",
           "default": "cose",
