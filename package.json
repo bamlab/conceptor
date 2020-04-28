@@ -35,6 +35,11 @@
           "default": "",
           "description": "Pattern for files to ignore when building the design graph"
         },
+        "conceptor.onlyIncludeAnnotatedFiles": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether the design graph should only include annotated files (true) or all project's files (false)"
+        },
         "conceptor.designGraphLayout": {
           "type": "string",
           "default": "cose",
@@ -80,6 +85,7 @@
     "@types/lodash": "^4.4.6",
     "@types/mocha": "^7.0.1",
     "@types/node": "^12.11.7",
+    "@types/sinon": "^9.0.0",
     "@types/vscode": "^1.43.0",
     "@typescript-eslint/eslint-plugin": "^2.18.0",
     "@typescript-eslint/parser": "^2.18.0",
@@ -88,6 +94,7 @@
     "glob": "^7.1.6",
     "mocha": "^7.0.1",
     "nyc": "^15.0.1",
+    "sinon": "^9.0.2",
     "source-map-support": "^0.5.18",
     "ts-node": "^8.9.0",
     "typescript": "^3.7.5",

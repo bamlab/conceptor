@@ -6,7 +6,7 @@
 import * as vscode from 'vscode';
 import { Annotation } from 'doctrine';
 import { DocumentParser, DesignDocument } from './DocumentParser';
-import { ConnectOpts } from 'net';
+import { ConfigurationManager } from './ConfigurationManager';
 
 export class CRCParser {
   private static extractNameFromDocumentName = ({ name }: DesignDocument) =>
@@ -36,12 +36,18 @@ export class CRCParser {
     );
 
   public static extractCRCCard = async (fileUri: vscode.Uri) => {
-    const document = await DocumentParser.parse(fileUri);
+    const document = await DocumentParser.parse(fileUri, {
+      skipUnannotated: ConfigurationManager.shouldOnlyIncludeAnnotatedFiles(),
+    });
 
-    return {
-      name: CRCParser.extractName(document),
-      responsibilities: CRCParser.extractResponsibilities(document.annotation),
-      collaborators: CRCParser.extractCollaborators(document.imports),
-    };
+    return document
+      ? {
+          name: CRCParser.extractName(document),
+          responsibilities: CRCParser.extractResponsibilities(
+            document.annotation,
+          ),
+          collaborators: CRCParser.extractCollaborators(document.imports),
+        }
+      : null;
   };
 }
