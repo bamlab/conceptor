@@ -9,7 +9,7 @@ import * as vscode from 'vscode';
 import { CRCCardsGenerator } from './CRCCardsGenerator';
 import { DesignGraphGenerator } from './view/DesignGraphGenerator';
 import { CRCCard } from './types/model';
-import { ConfigurationManager } from './view/ConfigurationManager';
+import { ConfigurationManager } from './ConfigurationManager';
 
 export class Conceptor {
   private context: vscode.ExtensionContext;
