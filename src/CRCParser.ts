@@ -6,7 +6,6 @@
 import * as vscode from 'vscode';
 import { Annotation } from 'doctrine';
 import { DocumentParser, DesignDocument } from './DocumentParser';
-import { ConnectOpts } from 'net';
 
 export class CRCParser {
   private static extractNameFromDocumentName = ({ name }: DesignDocument) =>
