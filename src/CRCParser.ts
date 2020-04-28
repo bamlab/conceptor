@@ -6,6 +6,7 @@
 import * as vscode from 'vscode';
 import { Annotation } from 'doctrine';
 import { DocumentParser, DesignDocument } from './DocumentParser';
+import { ConfigurationManager } from './ConfigurationManager';
 
 export class CRCParser {
   private static extractNameFromDocumentName = ({ name }: DesignDocument) =>
@@ -36,7 +37,7 @@ export class CRCParser {
 
   public static extractCRCCard = async (fileUri: vscode.Uri) => {
     const document = await DocumentParser.parse(fileUri, {
-      skipUnannotated: false,
+      skipUnannotated: ConfigurationManager.shouldOnlyIncludeAnnotatedFiles(),
     });
 
     return document
