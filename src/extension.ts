@@ -27,6 +27,11 @@ export const activate = (context: vscode.ExtensionContext) => {
     const conceptor = new Conceptor(context);
     await conceptor.buildDesignGraph();
 
+    vscode.workspace.onDidOpenTextDocument(() => {
+      console.log('Opening document');
+      conceptor.panel.webview.postMessage({ hello: 'world' });
+    });
+
     vscode.window.showInformationMessage('✅ Design Graph ready, 🙌 enjoy!');
   });
   context.subscriptions.push(disposable);

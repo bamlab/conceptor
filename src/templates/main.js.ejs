@@ -58,3 +58,9 @@ var cy = cytoscape({
         tpl: () => <%- JSON.stringify(node.data.content) %>
       }]);
 <%});%>
+
+window.addEventListener('message', (event) => {
+  console.log('LOGING FROM MESSAGE', event);
+  console.log('ELEMENTS', cy.elements('node[id = "CRCCard:Home"]').successors());
+  cy.fit(cy.elements('node[id = "CRCCard:Home"]').successors());
+});
