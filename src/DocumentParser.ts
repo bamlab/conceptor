@@ -16,6 +16,10 @@ export interface DesignDocument {
   body: string;
 }
 
+export interface DocumentParsingOptions {
+  skipUnannotated?: boolean;
+}
+
 export class DocumentParser {
   private static preparseDocument = (
     documentText: string,
@@ -55,10 +59,15 @@ export class DocumentParser {
 
   public static parse = async (
     fileUri: vscode.Uri,
-  ): Promise<DesignDocument> => {
+    options?: DocumentParsingOptions,
+  ): Promise<DesignDocument | null> => {
     const documentText = await readFile(fileUri);
     const { header, body } = DocumentParser.preparseDocument(documentText);
-    const annotation = header
+    let annotation;
+    if (options?.skipUnannotated && !header) {
+      return null;
+    }
+    annotation = header
       ? parse(header, {
           unwrap: true,
         })

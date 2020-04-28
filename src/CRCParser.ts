@@ -35,12 +35,18 @@ export class CRCParser {
     );
 
   public static extractCRCCard = async (fileUri: vscode.Uri) => {
-    const document = await DocumentParser.parse(fileUri);
+    const document = await DocumentParser.parse(fileUri, {
+      skipUnannotated: false,
+    });
 
-    return {
-      name: CRCParser.extractName(document),
-      responsibilities: CRCParser.extractResponsibilities(document.annotation),
-      collaborators: CRCParser.extractCollaborators(document.imports),
-    };
+    return document
+      ? {
+          name: CRCParser.extractName(document),
+          responsibilities: CRCParser.extractResponsibilities(
+            document.annotation,
+          ),
+          collaborators: CRCParser.extractCollaborators(document.imports),
+        }
+      : null;
   };
 }
