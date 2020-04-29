@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Provide an option to chose whether the graph should be built with only annotated files rather than all project's files
 
+### 🦋 Changed
+
+- Modify ignore files pattern to ignore node_modules by default
+
 ## [0.2.1] - 2020-04-27
 
 ### 🚑 Fixed
