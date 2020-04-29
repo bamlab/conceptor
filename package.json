@@ -32,7 +32,7 @@
         },
         "conceptor.ignoreFilePatterns": {
           "type": "string",
-          "default": "",
+          "default": "**/node_modules/**",
           "description": "Pattern for files to ignore when building the design graph"
         },
         "conceptor.onlyIncludeAnnotatedFiles": {
