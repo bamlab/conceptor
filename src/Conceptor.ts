@@ -10,16 +10,14 @@ import { CRCCardsGenerator } from './CRCCardsGenerator';
 import { DesignGraphGenerator } from './view/DesignGraphGenerator';
 import { CRCCard } from './types/model';
 import { ConfigurationManager } from './ConfigurationManager';
-import { ConceptorPanel } from './ConceptorPanel';
-import { DH_UNABLE_TO_CHECK_GENERATOR } from 'constants';
+import { ConceptorPanelManager } from './ConceptorPanelManager';
 
 export class Conceptor {
   private context: vscode.ExtensionContext;
-  // private panel: ConceptorPanel;
 
   constructor(context: vscode.ExtensionContext) {
     this.context = context;
-    ConceptorPanel.createOrShow();
+    ConceptorPanelManager.createOrShow();
 
     // Register lifecycle listeners
     vscode.workspace.onDidSaveTextDocument(this.buildDesignGraph);
@@ -32,11 +30,11 @@ export class Conceptor {
     );
 
   private renderDesignGraph = async (crcCards: CRCCard[]) => {
-    const panel = ConceptorPanel.getPanel();
+    const panel = ConceptorPanelManager.getPanel();
     if (!panel) {
       return;
     }
-    ConceptorPanel.setContent(
+    ConceptorPanelManager.setContent(
       await DesignGraphGenerator.withDesignGraph(crcCards)(panel, this.context),
     );
   };

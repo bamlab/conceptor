@@ -5,55 +5,14 @@
 
 import * as vscode from 'vscode';
 
-export class ConceptorPanel {
-  public static currentPanel?: ConceptorPanel;
+type Listener = (e: void) => any;
 
+export class ConceptorPanel {
   private readonly _panel: vscode.WebviewPanel;
   private _disposables: vscode.Disposable[] = [];
+  private _onDidDisposeListeners: Listener[] = [];
 
-  public static createOrShow() {
-    // If we already have a panel, show it.
-    if (ConceptorPanel.currentPanel) {
-      ConceptorPanel.currentPanel._panel.reveal();
-      return;
-    }
-
-    // Otherwise, create a new panel.
-    const panel = vscode.window.createWebviewPanel(
-      'conceptor.preview',
-      'Conceptor',
-      vscode.ViewColumn.Eight,
-      {
-        enableScripts: true,
-      },
-    );
-
-    ConceptorPanel.currentPanel = new ConceptorPanel(panel);
-  }
-
-  public static setContent(content: string) {
-    ConceptorPanel.currentPanel?._setContent(content);
-  }
-
-  public static getPanel() {
-    return ConceptorPanel.currentPanel?._panel;
-  }
-
-  private constructor(panel: vscode.WebviewPanel) {
-    this._panel = panel;
-
-    // Listen for when the panel is disposed
-    // This happens when the user closes the panel or when the panel is closed programatically
-    this._panel.onDidDispose(() => this.dispose(), null, this._disposables);
-  }
-
-  private _setContent(content: string) {
-    this._panel.webview.html = content;
-  }
-
-  public dispose() {
-    ConceptorPanel.currentPanel = undefined;
-
+  private dispose() {
     // Clean up our resources
     this._panel.dispose();
 
@@ -63,5 +22,30 @@ export class ConceptorPanel {
         x.dispose();
       }
     }
+    this._onDidDisposeListeners.forEach((listener: Listener) => listener());
+  }
+
+  public constructor(panel: vscode.WebviewPanel) {
+    this._panel = panel;
+
+    // Listen for when the panel is disposed
+    // This happens when the user closes the panel or when the panel is closed programatically
+    this._panel.onDidDispose(() => this.dispose(), null, this._disposables);
+  }
+
+  public setContent(content: string) {
+    this._panel.webview.html = content;
+  }
+
+  public getPanel() {
+    return this._panel;
+  }
+
+  public reveal() {
+    this._panel.reveal();
+  }
+
+  public onDidDispose(listener: (e: void) => any) {
+    this._onDidDisposeListeners.push(listener);
   }
 }
