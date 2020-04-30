@@ -10,19 +10,16 @@ import { CRCCardsGenerator } from './CRCCardsGenerator';
 import { DesignGraphGenerator } from './view/DesignGraphGenerator';
 import { CRCCard } from './types/model';
 import { ConfigurationManager } from './ConfigurationManager';
+import { ConceptorPanel } from './ConceptorPanel';
+import { DH_UNABLE_TO_CHECK_GENERATOR } from 'constants';
 
 export class Conceptor {
   private context: vscode.ExtensionContext;
-  private panel: vscode.WebviewPanel;
+  // private panel: ConceptorPanel;
 
   constructor(context: vscode.ExtensionContext) {
     this.context = context;
-    this.panel = vscode.window.createWebviewPanel(
-      'conceptor.preview',
-      'Conceptor',
-      vscode.ViewColumn.Eight,
-      { enableScripts: true },
-    );
+    ConceptorPanel.createOrShow();
 
     // Register lifecycle listeners
     vscode.workspace.onDidSaveTextDocument(this.buildDesignGraph);
@@ -35,9 +32,13 @@ export class Conceptor {
     );
 
   private renderDesignGraph = async (crcCards: CRCCard[]) => {
-    this.panel.webview.html = await DesignGraphGenerator.withDesignGraph(
-      crcCards,
-    )(this.panel, this.context);
+    const panel = ConceptorPanel.getPanel();
+    if (!panel) {
+      return;
+    }
+    ConceptorPanel.setContent(
+      await DesignGraphGenerator.withDesignGraph(crcCards)(panel, this.context),
+    );
   };
 
   public buildDesignGraph = async () => {
