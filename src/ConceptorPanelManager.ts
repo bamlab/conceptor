@@ -13,7 +13,7 @@ export class ConceptorPanelManager {
     // If we already have a panel, show it.
     if (ConceptorPanelManager.currentPanel) {
       ConceptorPanelManager.currentPanel.reveal();
-      return;
+      return ConceptorPanelManager.currentPanel;
     }
 
     // Otherwise, create a new panel.
@@ -30,13 +30,10 @@ export class ConceptorPanelManager {
     ConceptorPanelManager.currentPanel.onDidDispose(() => {
       ConceptorPanelManager.currentPanel = undefined;
     });
+    return ConceptorPanelManager.currentPanel;
   }
 
   public static setContent(content: string) {
     ConceptorPanelManager.currentPanel?.setContent(content);
-  }
-
-  public static getPanel() {
-    return ConceptorPanelManager.currentPanel?.getPanel();
   }
 }

@@ -11,13 +11,15 @@ import { DesignGraphGenerator } from './view/DesignGraphGenerator';
 import { CRCCard } from './types/model';
 import { ConfigurationManager } from './ConfigurationManager';
 import { ConceptorPanelManager } from './ConceptorPanelManager';
+import { ConceptorPanel } from './ConceptorPanel';
 
 export class Conceptor {
   private context: vscode.ExtensionContext;
+  private panel: ConceptorPanel;
 
   constructor(context: vscode.ExtensionContext) {
     this.context = context;
-    ConceptorPanelManager.createOrShow();
+    this.panel = ConceptorPanelManager.createOrShow();
 
     // Register lifecycle listeners
     vscode.workspace.onDidSaveTextDocument(this.buildDesignGraph);
@@ -30,12 +32,14 @@ export class Conceptor {
     );
 
   private renderDesignGraph = async (crcCards: CRCCard[]) => {
-    const panel = ConceptorPanelManager.getPanel();
-    if (!panel) {
+    if (!this.panel) {
       return;
     }
     ConceptorPanelManager.setContent(
-      await DesignGraphGenerator.withDesignGraph(crcCards)(panel, this.context),
+      await DesignGraphGenerator.withDesignGraph(crcCards)(
+        this.panel.getPanel(),
+        this.context,
+      ),
     );
   };
 
