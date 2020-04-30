@@ -9,6 +9,7 @@ import { compileTemplate } from './utils';
 import { CRCCard } from '../types/model';
 import { NodeType, EdgeType } from '../types/view';
 import { ConfigurationManager } from '../ConfigurationManager';
+import { ConceptorPanel } from '../ConceptorPanel';
 
 const style = {
   crcCard: {
@@ -18,18 +19,25 @@ const style = {
 };
 
 export class DesignGraphGenerator {
-  private static loadDependencies = (
-    panel: vscode.WebviewPanel,
-    context: vscode.ExtensionContext,
-  ) =>
+  private readonly _panel: ConceptorPanel;
+  private readonly _context: vscode.ExtensionContext;
+
+  public constructor(panel: ConceptorPanel, context: vscode.ExtensionContext) {
+    this._panel = panel;
+    this._context = context;
+  }
+
+  private loadDependencies = () =>
     [
       path.join(
-        context.extensionPath,
+        this._context.extensionPath,
         'node_modules/cytoscape-node-html-label/dist',
         'cytoscape-node-html-label.min.js',
       ),
     ].map((dependencyPath: string) =>
-      panel.webview.asWebviewUri(vscode.Uri.file(dependencyPath)),
+      this._panel
+        .getPanel()
+        .webview.asWebviewUri(vscode.Uri.file(dependencyPath)),
     );
 
   private static createNodes = async (crcCards: CRCCard[]) =>
@@ -80,11 +88,8 @@ export class DesignGraphGenerator {
       layout: ConfigurationManager.getDesignGraphLayout(),
     });
 
-  public static withDesignGraph = (crcCards: CRCCard[]) => async (
-    panel: vscode.WebviewPanel,
-    context: vscode.ExtensionContext,
-  ) => {
-    const dependencies = DesignGraphGenerator.loadDependencies(panel, context);
+  public withDesignGraph = (crcCards: CRCCard[]) => async () => {
+    const dependencies = this.loadDependencies();
     const nodes = await DesignGraphGenerator.createNodes(crcCards);
     const edges = DesignGraphGenerator.createEdges(crcCards);
 

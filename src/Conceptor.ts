@@ -11,19 +11,9 @@ import { DesignGraphGenerator } from './view/DesignGraphGenerator';
 import { CRCCard } from './types/model';
 import { ConfigurationManager } from './ConfigurationManager';
 import { ConceptorPanelManager } from './ConceptorPanelManager';
-import { ConceptorPanel } from './ConceptorPanel';
 
 export class Conceptor {
-  private context: vscode.ExtensionContext;
-  private panel: ConceptorPanel;
-
-  constructor(context: vscode.ExtensionContext) {
-    this.context = context;
-    this.panel = ConceptorPanelManager.createOrShow();
-
-    // Register lifecycle listeners
-    vscode.workspace.onDidSaveTextDocument(this.buildDesignGraph);
-  }
+  private designGraphGenerator: DesignGraphGenerator;
 
   private static findFiles = async () =>
     vscode.workspace.findFiles(
@@ -32,16 +22,20 @@ export class Conceptor {
     );
 
   private renderDesignGraph = async (crcCards: CRCCard[]) => {
-    if (!this.panel) {
-      return;
-    }
     ConceptorPanelManager.setContent(
-      await DesignGraphGenerator.withDesignGraph(crcCards)(
-        this.panel.getPanel(),
-        this.context,
-      ),
+      await this.designGraphGenerator.withDesignGraph(crcCards)(),
     );
   };
+
+  public constructor(context: vscode.ExtensionContext) {
+    this.designGraphGenerator = new DesignGraphGenerator(
+      ConceptorPanelManager.createOrShow(),
+      context,
+    );
+
+    // Register lifecycle listeners
+    vscode.workspace.onDidSaveTextDocument(this.buildDesignGraph);
+  }
 
   public buildDesignGraph = async () => {
     const fileUris = await Conceptor.findFiles();
