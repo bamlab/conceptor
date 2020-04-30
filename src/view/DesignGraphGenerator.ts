@@ -88,7 +88,7 @@ export class DesignGraphGenerator {
       layout: ConfigurationManager.getDesignGraphLayout(),
     });
 
-  public withDesignGraph = (crcCards: CRCCard[]) => async () => {
+  public generateDesignGraph = async (crcCards: CRCCard[]) => {
     const dependencies = this.loadDependencies();
     const nodes = await DesignGraphGenerator.createNodes(crcCards);
     const edges = DesignGraphGenerator.createEdges(crcCards);

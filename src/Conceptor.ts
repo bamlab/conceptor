@@ -23,7 +23,7 @@ export class Conceptor {
 
   private renderDesignGraph = async (crcCards: CRCCard[]) => {
     ConceptorPanelManager.setContent(
-      await this.designGraphGenerator.withDesignGraph(crcCards)(),
+      await this.designGraphGenerator.generateDesignGraph(crcCards),
     );
   };
 
