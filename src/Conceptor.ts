@@ -7,7 +7,7 @@
 
 import * as vscode from 'vscode';
 import { CRCCardsGenerator } from './CRCCardsGenerator';
-import { DesignGraphGenerator } from './view/DesignGraphGenerator';
+import { DesignGraphGenerator } from './DesignGraphGenerator';
 import { CRCCard } from './types/model';
 import { ConfigurationManager } from './ConfigurationManager';
 import { ConceptorPanelManager } from './ConceptorPanelManager';

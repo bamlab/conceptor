@@ -5,11 +5,11 @@
 
 import * as vscode from 'vscode';
 import * as path from 'path';
-import { compileTemplate } from '../utils/Template';
-import { CRCCard } from '../types/model';
-import { NodeType, EdgeType } from '../types/view';
-import { ConfigurationManager } from '../ConfigurationManager';
-import { ConceptorPanel } from '../ConceptorPanel';
+import { compileTemplate } from './utils/Template';
+import { CRCCard } from './types/model';
+import { NodeType, EdgeType } from './types/view';
+import { ConfigurationManager } from './ConfigurationManager';
+import { ConceptorPanel } from './ConceptorPanel';
 
 const style = {
   crcCard: {
