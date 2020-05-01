@@ -25,6 +25,23 @@ export class ConceptorPanel {
     this._onDidDisposeListeners.forEach((listener: Listener) => listener());
   }
 
+  // The documentation (https://code.visualstudio.com/api/extension-guides/webview#loading-local-content)
+  // explains that Webview.asWebviewUri should format the given Uri into "vscode-resource:/my/absolute/path/to/my-local-resource.png".
+  // However, it actually returns a Uri formatted as "vscode-resource://file///my/absolute/path/to/my-local-resource.png"
+  // which seems to load unconsistently.
+  // We must ignore typing constraints and use private constructor for vscode.Uri class in order to
+  // remove the "file" authority and the unnecessary "//" prefix to the path
+  // This function may be removed if the issue is fixed in the https://github.com/microsoft/vscode repository
+  private static adaptWebviewUri = (webviewUri: vscode.Uri) =>
+    // @ts-ignore
+    new vscode.Uri(
+      webviewUri.scheme,
+      '',
+      webviewUri.path.replace(/\/\//, ''),
+      webviewUri.query,
+      webviewUri.fragment,
+    );
+
   public constructor(panel: vscode.WebviewPanel) {
     this._panel = panel;
 
@@ -34,9 +51,12 @@ export class ConceptorPanel {
   }
 
   public loadDependencies = (dependenciePaths: string[]) =>
-    dependenciePaths.map((dependencyPath: string) =>
-      this._panel.webview.asWebviewUri(vscode.Uri.file(dependencyPath)),
-    );
+    dependenciePaths.map((dependencyPath: string) => {
+      const webviewUri = this._panel.webview.asWebviewUri(
+        vscode.Uri.file(dependencyPath),
+      );
+      return ConceptorPanel.adaptWebviewUri(webviewUri);
+    });
 
   public setContent(content: string) {
     this._panel.webview.html = content;

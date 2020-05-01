@@ -16,6 +16,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Modify ignore files pattern to ignore node_modules by default
 - Prevent from opening multiple panels when running the "Conceptor" command several time. It only reloads it
 
+### 🚑 Fixed
+
+- Fix CRC Cards content inconsistent initial rendering
+
 ## [0.2.1] - 2020-04-27
 
 ### 🚑 Fixed
