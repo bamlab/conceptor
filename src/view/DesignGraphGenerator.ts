@@ -28,17 +28,13 @@ export class DesignGraphGenerator {
   }
 
   private loadDependencies = () =>
-    [
+    this._panel.loadDependencies([
       path.join(
         this._context.extensionPath,
         'node_modules/cytoscape-node-html-label/dist',
         'cytoscape-node-html-label.min.js',
       ),
-    ].map((dependencyPath: string) =>
-      this._panel
-        .getPanel()
-        .webview.asWebviewUri(vscode.Uri.file(dependencyPath)),
-    );
+    ]);
 
   private static createNodes = async (crcCards: CRCCard[]) =>
     Promise.all(
