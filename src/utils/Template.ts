@@ -1,3 +1,8 @@
+/**
+ * @name utils/Template
+ * @responsibility Provide template related utilities
+ **/
+
 import { renderFile } from 'ejs';
 import * as path from 'path';
 

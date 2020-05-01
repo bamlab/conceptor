@@ -5,7 +5,7 @@
 
 import * as vscode from 'vscode';
 import * as path from 'path';
-import { compileTemplate } from './utils';
+import { compileTemplate } from '../utils/Template';
 import { CRCCard } from '../types/model';
 import { NodeType, EdgeType } from '../types/view';
 import { ConfigurationManager } from '../ConfigurationManager';
