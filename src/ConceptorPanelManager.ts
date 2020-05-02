@@ -20,7 +20,7 @@ export class ConceptorPanelManager {
     const panel = vscode.window.createWebviewPanel(
       'conceptor.preview',
       'Conceptor',
-      vscode.ViewColumn.Eight,
+      { viewColumn: vscode.ViewColumn.Eight, preserveFocus: true },
       {
         enableScripts: true,
       },
