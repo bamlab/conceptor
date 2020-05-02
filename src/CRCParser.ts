@@ -5,6 +5,7 @@
 
 import * as vscode from 'vscode';
 import { Annotation } from 'doctrine';
+import { extractFileName } from './utils/FileSystem';
 import { DocumentParser, DesignDocument } from './DocumentParser';
 import { ConfigurationManager } from './ConfigurationManager';
 
@@ -35,6 +36,9 @@ export class CRCParser {
       [],
     );
 
+  public static extractId = (fileUri: vscode.Uri) =>
+    extractFileName(fileUri)?.split('.')[0];
+
   public static extractCRCCard = async (fileUri: vscode.Uri) => {
     const document = await DocumentParser.parse(fileUri, {
       skipUnannotated: ConfigurationManager.shouldOnlyIncludeAnnotatedFiles(),
@@ -42,6 +46,7 @@ export class CRCParser {
 
     return document
       ? {
+          id: CRCParser.extractId(fileUri),
           name: CRCParser.extractName(document),
           responsibilities: CRCParser.extractResponsibilities(
             document.annotation,

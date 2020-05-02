@@ -40,7 +40,7 @@ export class DesignGraphGenerator {
     Promise.all(
       crcCards.map(async (crcCard) => ({
         data: {
-          id: `CRCCard:${crcCard.name}`,
+          id: `CRCCard:${crcCard.id}`,
           content: await compileTemplate('crc-card.html', {
             data: {
               name: crcCard.name,
@@ -63,8 +63,8 @@ export class DesignGraphGenerator {
         ) {
           collaborationEdges.push({
             data: {
-              id: `Collaboration:${crcCard.name}->${collaborator}`,
-              source: `CRCCard:${crcCard.name}`,
+              id: `Collaboration:${crcCard.id}->${collaborator}`,
+              source: `CRCCard:${crcCard.id}`,
               target: `CRCCard:${collaborator}`,
             },
           });
