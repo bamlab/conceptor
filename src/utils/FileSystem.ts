@@ -9,3 +9,6 @@ export const readFile = async (fileUri: vscode.Uri) => {
   const document = await vscode.workspace.openTextDocument(fileUri.path);
   return document.getText();
 };
+
+export const extractFileName = (fileUri: vscode.Uri) =>
+  fileUri.path?.split('/').pop();

@@ -58,3 +58,13 @@ var cy = cytoscape({
         tpl: () => <%- JSON.stringify(node.data.content) %>
       }]);
 <%});%>
+
+window.addEventListener('message', (event) => {
+  const type = event.data.type;
+  switch(type) {
+    case 'focus':
+      const targetID = event.data.targetID;
+      cy.fit(cy.elements(`node[id = "${targetID}"]`), 100);
+    default: break;
+  }
+});

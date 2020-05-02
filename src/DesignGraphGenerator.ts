@@ -10,6 +10,7 @@ import { CRCCard } from './types/model';
 import { NodeType, EdgeType } from './types/view';
 import { ConfigurationManager } from './ConfigurationManager';
 import { ConceptorPanel } from './ConceptorPanel';
+import { CRCParser } from './CRCParser';
 
 const style = {
   crcCard: {
@@ -25,6 +26,13 @@ export class DesignGraphGenerator {
   public constructor(panel: ConceptorPanel, context: vscode.ExtensionContext) {
     this._panel = panel;
     this._context = context;
+
+    vscode.workspace.onDidOpenTextDocument((document: vscode.TextDocument) => {
+      this._panel.postMessage({
+        type: 'focus',
+        targetID: `CRCCard:${CRCParser.extractId(document.uri)}`,
+      });
+    });
   }
 
   private loadDependencies = () =>
@@ -40,7 +48,7 @@ export class DesignGraphGenerator {
     Promise.all(
       crcCards.map(async (crcCard) => ({
         data: {
-          id: `CRCCard:${crcCard.name}`,
+          id: `CRCCard:${crcCard.id}`,
           content: await compileTemplate('crc-card.html', {
             data: {
               name: crcCard.name,
@@ -63,8 +71,8 @@ export class DesignGraphGenerator {
         ) {
           collaborationEdges.push({
             data: {
-              id: `Collaboration:${crcCard.name}->${collaborator}`,
-              source: `CRCCard:${crcCard.name}`,
+              id: `Collaboration:${crcCard.id}->${collaborator}`,
+              source: `CRCCard:${crcCard.id}`,
               target: `CRCCard:${collaborator}`,
             },
           });

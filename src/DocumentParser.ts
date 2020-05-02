@@ -6,7 +6,7 @@
 import * as vscode from 'vscode';
 import { parse, Annotation, Tag } from 'doctrine';
 import { DesignDocumentFormatType } from './types/model';
-import { readFile } from './utils/FileSystem';
+import { extractFileName, readFile } from './utils/FileSystem';
 const ImportParser = require('import-parser');
 
 export interface DesignDocument {
@@ -37,9 +37,6 @@ export class DocumentParser {
       body,
     };
   };
-
-  private static extractFileName = (fileUri: vscode.Uri) =>
-    fileUri.path.split('/').pop();
 
   private static parseImportStatements = (documentBody: string): Import[] => {
     try {
@@ -73,7 +70,7 @@ export class DocumentParser {
         })
       : undefined;
     return {
-      name: DocumentParser.extractFileName(fileUri),
+      name: extractFileName(fileUri),
       annotation,
       imports: DocumentParser.parseImportStatements(body),
       body,
