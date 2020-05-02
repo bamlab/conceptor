@@ -62,6 +62,10 @@ export class ConceptorPanel {
     this._panel.webview.html = content;
   }
 
+  public postMessage(data: any) {
+    this._panel.webview.postMessage(data);
+  }
+
   public getPanel() {
     return this._panel;
   }

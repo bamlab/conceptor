@@ -10,6 +10,7 @@ import { CRCCard } from './types/model';
 import { NodeType, EdgeType } from './types/view';
 import { ConfigurationManager } from './ConfigurationManager';
 import { ConceptorPanel } from './ConceptorPanel';
+import { CRCParser } from './CRCParser';
 
 const style = {
   crcCard: {
@@ -25,6 +26,13 @@ export class DesignGraphGenerator {
   public constructor(panel: ConceptorPanel, context: vscode.ExtensionContext) {
     this._panel = panel;
     this._context = context;
+
+    vscode.workspace.onDidOpenTextDocument((document: vscode.TextDocument) => {
+      this._panel.postMessage({
+        type: 'focus',
+        targetID: `CRCCard:${CRCParser.extractId(document.uri)}`,
+      });
+    });
   }
 
   private loadDependencies = () =>

@@ -60,7 +60,11 @@ var cy = cytoscape({
 <%});%>
 
 window.addEventListener('message', (event) => {
-  console.log('LOGING FROM MESSAGE', event);
-  console.log('ELEMENTS', cy.elements('node[id = "CRCCard:Home"]').successors());
-  cy.fit(cy.elements('node[id = "CRCCard:Home"]').successors());
+  const type = event.data.type;
+  switch(type) {
+    case 'focus':
+      const targetID = event.data.targetID;
+      cy.fit(cy.elements(`node[id = "${targetID}"]`), 100);
+    default: break;
+  }
 });
