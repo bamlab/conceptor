@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### 🎉 Added
 
 - Provide an option to chose whether the graph should be built with only annotated files rather than all project's files
+- Focus on the corresponding CRC Card when a file is open
 
 ### 🦋 Changed
 
