@@ -4,6 +4,7 @@
  **/
 
 import * as vscode from 'vscode';
+import { compileTemplate } from './utils/Template';
 
 type Listener = (e: void) => any;
 
@@ -42,8 +43,15 @@ export class ConceptorPanel {
       webviewUri.fragment,
     );
 
+  private initLoadingView = () =>
+    compileTemplate('loader.html').then((loadingViewContent: string) => {
+      this._panel.webview.html = loadingViewContent;
+    });
+
   public constructor(panel: vscode.WebviewPanel) {
     this._panel = panel;
+
+    this.initLoadingView();
 
     // Listen for when the panel is disposed
     // This happens when the user closes the panel or when the panel is closed programatically
