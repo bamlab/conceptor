@@ -4,10 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Conceptor Graph</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.14.1/cytoscape.min.js"></script>
-    <% dependencies.forEach(dependency => { %>
-    <script src="<%- dependency %>"></script>
-    <%});%>
   </head>
   <style>
     #cy {
@@ -21,6 +17,10 @@
 
   <body>
     <div id="cy"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.14.1/cytoscape.min.js"></script>
+    <% dependencies.forEach(dependency => { %>
+    <script src="<%- dependency %>"></script>
+    <%});%>
     <script>
       <%- script %>
     </script>
