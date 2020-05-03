@@ -6,7 +6,7 @@
 import * as vscode from 'vscode';
 import { parse, Annotation, Tag } from 'doctrine';
 import { DesignDocumentFormatType } from './types/model';
-import { readFile } from './utils/FileSystem';
+import { extractFileName, readFile } from './utils/FileSystem';
 const ImportParser = require('import-parser');
 
 export interface DesignDocument {
@@ -14,6 +14,10 @@ export interface DesignDocument {
   annotation?: Annotation;
   imports: Import[];
   body: string;
+}
+
+export interface DocumentParsingOptions {
+  skipUnannotated?: boolean;
 }
 
 export class DocumentParser {
@@ -34,9 +38,6 @@ export class DocumentParser {
     };
   };
 
-  private static extractFileName = (fileUri: vscode.Uri) =>
-    fileUri.path.split('/').pop();
-
   private static parseImportStatements = (documentBody: string): Import[] => {
     try {
       return ImportParser(documentBody);
@@ -55,16 +56,21 @@ export class DocumentParser {
 
   public static parse = async (
     fileUri: vscode.Uri,
-  ): Promise<DesignDocument> => {
+    options?: DocumentParsingOptions,
+  ): Promise<DesignDocument | null> => {
     const documentText = await readFile(fileUri);
     const { header, body } = DocumentParser.preparseDocument(documentText);
-    const annotation = header
+    let annotation;
+    if (options?.skipUnannotated && !header) {
+      return null;
+    }
+    annotation = header
       ? parse(header, {
           unwrap: true,
         })
       : undefined;
     return {
-      name: DocumentParser.extractFileName(fileUri),
+      name: extractFileName(fileUri),
       annotation,
       imports: DocumentParser.parseImportStatements(body),
       body,

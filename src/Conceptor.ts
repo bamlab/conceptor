@@ -7,26 +7,13 @@
 
 import * as vscode from 'vscode';
 import { CRCCardsGenerator } from './CRCCardsGenerator';
-import { DesignGraphGenerator } from './view/DesignGraphGenerator';
+import { DesignGraphGenerator } from './DesignGraphGenerator';
 import { CRCCard } from './types/model';
-import { ConfigurationManager } from './view/ConfigurationManager';
+import { ConfigurationManager } from './ConfigurationManager';
+import { ConceptorPanelManager } from './ConceptorPanelManager';
 
 export class Conceptor {
-  private context: vscode.ExtensionContext;
-  private panel: vscode.WebviewPanel;
-
-  constructor(context: vscode.ExtensionContext) {
-    this.context = context;
-    this.panel = vscode.window.createWebviewPanel(
-      'conceptor.preview',
-      'Conceptor',
-      vscode.ViewColumn.Eight,
-      { enableScripts: true },
-    );
-
-    // Register lifecycle listeners
-    vscode.workspace.onDidSaveTextDocument(this.buildDesignGraph);
-  }
+  private designGraphGenerator: DesignGraphGenerator;
 
   private static findFiles = async () =>
     vscode.workspace.findFiles(
@@ -35,10 +22,20 @@ export class Conceptor {
     );
 
   private renderDesignGraph = async (crcCards: CRCCard[]) => {
-    this.panel.webview.html = await DesignGraphGenerator.withDesignGraph(
-      crcCards,
-    )(this.panel, this.context);
+    ConceptorPanelManager.setContent(
+      await this.designGraphGenerator.generateDesignGraph(crcCards),
+    );
   };
+
+  public constructor(context: vscode.ExtensionContext) {
+    this.designGraphGenerator = new DesignGraphGenerator(
+      ConceptorPanelManager.createOrShow(),
+      context,
+    );
+
+    // Register lifecycle listeners
+    vscode.workspace.onDidSaveTextDocument(this.buildDesignGraph);
+  }
 
   public buildDesignGraph = async () => {
     const fileUris = await Conceptor.findFiles();

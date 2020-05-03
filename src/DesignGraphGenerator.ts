@@ -5,10 +5,12 @@
 
 import * as vscode from 'vscode';
 import * as path from 'path';
-import { compileTemplate } from './utils';
-import { CRCCard } from '../types/model';
-import { NodeType, EdgeType } from '../types/view';
+import { compileTemplate } from './utils/Template';
+import { CRCCard } from './types/model';
+import { NodeType, EdgeType } from './types/view';
 import { ConfigurationManager } from './ConfigurationManager';
+import { ConceptorPanel } from './ConceptorPanel';
+import { CRCParser } from './CRCParser';
 
 const style = {
   crcCard: {
@@ -18,25 +20,35 @@ const style = {
 };
 
 export class DesignGraphGenerator {
-  private static loadDependencies = (
-    panel: vscode.WebviewPanel,
-    context: vscode.ExtensionContext,
-  ) =>
-    [
+  private readonly _panel: ConceptorPanel;
+  private readonly _context: vscode.ExtensionContext;
+
+  public constructor(panel: ConceptorPanel, context: vscode.ExtensionContext) {
+    this._panel = panel;
+    this._context = context;
+
+    vscode.workspace.onDidOpenTextDocument((document: vscode.TextDocument) => {
+      this._panel.postMessage({
+        type: 'focus',
+        targetID: `CRCCard:${CRCParser.extractId(document.uri)}`,
+      });
+    });
+  }
+
+  private loadDependencies = () =>
+    this._panel.loadDependencies([
       path.join(
-        context.extensionPath,
+        this._context.extensionPath,
         'node_modules/cytoscape-node-html-label/dist',
         'cytoscape-node-html-label.min.js',
       ),
-    ].map((dependencyPath: string) =>
-      panel.webview.asWebviewUri(vscode.Uri.file(dependencyPath)),
-    );
+    ]);
 
   private static createNodes = async (crcCards: CRCCard[]) =>
     Promise.all(
       crcCards.map(async (crcCard) => ({
         data: {
-          id: `CRCCard:${crcCard.name}`,
+          id: `CRCCard:${crcCard.id}`,
           content: await compileTemplate('crc-card.html', {
             data: {
               name: crcCard.name,
@@ -59,8 +71,8 @@ export class DesignGraphGenerator {
         ) {
           collaborationEdges.push({
             data: {
-              id: `Collaboration:${crcCard.name}->${collaborator}`,
-              source: `CRCCard:${crcCard.name}`,
+              id: `Collaboration:${crcCard.id}->${collaborator}`,
+              source: `CRCCard:${crcCard.id}`,
               target: `CRCCard:${collaborator}`,
             },
           });
@@ -78,13 +90,13 @@ export class DesignGraphGenerator {
       edges,
       style,
       layout: ConfigurationManager.getDesignGraphLayout(),
+      options: {
+        includeSuccessorsOnFocus: ConfigurationManager.shouldIncludeSuccessorsOnAutoFocus(),
+      },
     });
 
-  public static withDesignGraph = (crcCards: CRCCard[]) => async (
-    panel: vscode.WebviewPanel,
-    context: vscode.ExtensionContext,
-  ) => {
-    const dependencies = DesignGraphGenerator.loadDependencies(panel, context);
+  public generateDesignGraph = async (crcCards: CRCCard[]) => {
+    const dependencies = this.loadDependencies();
     const nodes = await DesignGraphGenerator.createNodes(crcCards);
     const edges = DesignGraphGenerator.createEdges(crcCards);
 

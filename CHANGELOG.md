@@ -5,6 +5,23 @@ All notable changes to the "conceptor" extension will be documented in this file
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 03-05-2020
+
+### 🎉 Added
+
+- Provide an option to chose whether the graph should be built with only annotated files rather than all project's files
+- Focus on the corresponding CRC Card when a file is open
+- Provide an option to chose whether successors nodes should be included within the view when focusing on opened file
+
+### 🦋 Changed
+
+- Modify ignore files pattern to ignore node_modules by default
+- Prevent from opening multiple panels when running the "Conceptor" command several time. It only reloads it
+
+### 🚑 Fixed
+
+- Fix CRC Cards content inconsistent initial rendering
+
 ## [0.2.1] - 2020-04-27
 
 ### 🚑 Fixed
