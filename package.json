@@ -40,6 +40,11 @@
           "default": true,
           "description": "Whether the design graph should only include annotated files (true) or all project's files (false)"
         },
+        "conceptor.includeSuccessorsOnAutoFocus": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether successors nodes should be included within the view when focusing on opened file (true)"
+        },
         "conceptor.designGraphLayout": {
           "type": "string",
           "default": "cose",

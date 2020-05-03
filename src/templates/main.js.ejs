@@ -64,7 +64,13 @@ window.addEventListener('message', (event) => {
   switch(type) {
     case 'focus':
       const targetID = event.data.targetID;
-      cy.fit(cy.elements(`node[id = "${targetID}"]`), 100);
+      let target = cy.elements(`node[id = "${targetID}"]`)
+      let padding = 100;
+      if (<%- options.includeSuccessorsOnFocus %> && !target.outgoers().empty()) {
+        target = target.outgoers();
+        padding = 0;
+      }
+      cy.fit(target, padding);
     default: break;
   }
 });

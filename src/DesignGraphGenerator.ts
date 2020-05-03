@@ -90,6 +90,9 @@ export class DesignGraphGenerator {
       edges,
       style,
       layout: ConfigurationManager.getDesignGraphLayout(),
+      options: {
+        includeSuccessorsOnFocus: ConfigurationManager.shouldIncludeSuccessorsOnAutoFocus(),
+      },
     });
 
   public generateDesignGraph = async (crcCards: CRCCard[]) => {
