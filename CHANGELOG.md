@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### 🎉 Added
 
 - Display loader in panel to materialize loading time
+- Display arrows on collaboration edges to show highlight orientation from component to collaborators 
 
 ## [0.3.0] - 03-05-2020
 
