@@ -5,32 +5,17 @@ const style = [
       shape: 'round-rectangle',
       height: <%- style.crcCard.height %>,
       width: <%- style.crcCard.width %>,
-      color: 'red',
       'background-color': 'white',
       'text-halign': 'center',
       'text-valign': 'center',
     },
   },
   {
-    selector: '[id *= ":title"]',
-    style: {
-      label: 'data(label)',
-      'font-size': 20,
-      'text-halign': 'center',
-      'text-valign': 'center',
-    },
-  },
-  {
-    selector: '[id *= ":responsibility"]',
-    style: {
-      label: 'data(label)',
-      'font-size': 20,
-    },
-  },
-  {
     selector: 'edge',
     style: {
-      'target-arrow-shape': 'vee',
+      'curve-style': 'bezier',
+      'arrow-scale': 3,
+      'target-arrow-shape': 'triangle',
     },
   },
 ];
