@@ -5,7 +5,7 @@
 
 import * as vscode from 'vscode';
 import { parse, Annotation, Tag } from 'doctrine';
-import { DesignDocumentFormatType } from './types/model';
+import { DesignDocumentFormatType } from './typings/model';
 import { extractFileName, readFile } from './utils/FileSystem';
 const ImportParser = require('import-parser');
 

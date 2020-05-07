@@ -6,8 +6,8 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import { compileTemplate } from './utils/Template';
-import { CRCCard } from './types/model';
-import { NodeType, EdgeType } from './types/view';
+import { CRCCard } from './typings/model';
+import { NodeType, EdgeType } from './typings/view';
 import { ConfigurationManager } from './ConfigurationManager';
 import { ConceptorPanel } from './ConceptorPanel';
 import { CRCParser } from './CRCParser';
