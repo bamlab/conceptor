@@ -30,7 +30,7 @@ export class DocumentParser {
     documentText: string,
   ): DesignDocumentFormatType => {
     // TODO: Use a cleaner way to ignore file body and keep header
-    const [header, body] = documentText.split('**/');
+    const [header, body] = documentText.split('*/');
     if (!body) {
       // the file actually has no header
       return {
