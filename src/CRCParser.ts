@@ -5,7 +5,11 @@
 
 import * as vscode from 'vscode';
 import { Annotation } from 'doctrine';
+import {
+  extractFilePath,
+  removeExtension,
 import { extractFilePath } from './utils/FileSystem';
+} from './utils/FileSystem';
 import { DocumentParser, DesignDocument } from './DocumentParser';
 import { ConfigurationManager } from './ConfigurationManager';
 import { Collaborator, Dependency } from './typings/model';
@@ -49,11 +53,12 @@ export class CRCParser {
   };
 
   public static extractId = (fileUri: vscode.Uri) =>
-    extractFilePath(fileUri)
-      ?.replace(`${vscode.workspace.rootPath}/` || '', '')
-      .split('.')
-      .slice(0, -1)
-      .join('.');
+    removeExtension(
+      extractFilePath(fileUri)?.replace(
+        `${vscode.workspace.rootPath}/` || '',
+        '',
+      ),
+    );
 
   public static extractCRCCard = async (fileUri: vscode.Uri) => {
     const document = await DocumentParser.parse(fileUri, {
