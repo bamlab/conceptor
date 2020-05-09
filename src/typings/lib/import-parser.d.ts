@@ -2,6 +2,6 @@ declare module 'import-parser';
 
 interface Import {
   originalMatch: string;
-  moddulePath: string;
+  modulePath: string;
   importList: string[];
 }

@@ -10,5 +10,10 @@ export const readFile = async (fileUri: vscode.Uri) => {
   return document.getText();
 };
 
+export const extractFilePath = (fileUri: vscode.Uri) => fileUri.path;
+
 export const extractFileName = (fileUri: vscode.Uri) =>
   fileUri.path?.split('/').pop();
+
+export const extractFileLocation = (fileUri: vscode.Uri) =>
+  fileUri.path?.split('/').slice(0, -1).join('/');
