@@ -49,7 +49,11 @@ export class CRCParser {
   };
 
   public static extractId = (fileUri: vscode.Uri) =>
-    extractFilePath(fileUri)?.split('.').slice(0, -1).join('.');
+    extractFilePath(fileUri)
+      ?.replace(`${vscode.workspace.rootPath}/` || '', '')
+      .split('.')
+      .slice(0, -1)
+      .join('.');
 
   public static extractCRCCard = async (fileUri: vscode.Uri) => {
     const document = await DocumentParser.parse(fileUri, {
