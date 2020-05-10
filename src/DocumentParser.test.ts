@@ -34,13 +34,19 @@ const imports = [
     originalMatch: "import { Titi } from 'toto'",
   },
   {
+    importList: ['One', 'Two', 'Three', 'Four', 'Five'],
+    modulePath: 'multiline-import-package',
+    originalMatch:
+      "import {\n One,\n Two,\n Three,\n Four,\n Five,\n } from 'multiline-import-package'",
+  },
+  {
     importList: ['Foo'],
     modulePath: './bar',
     originalMatch: "import { Foo } from './bar'",
   },
 ];
 const header = `/**\n* @${annotation.tags[0].title} ${annotation.tags[0].name}\n* @${annotation.tags[1].title} ${annotation.tags[1].description}\n**/`;
-const body = `\n${imports[0].originalMatch}';\n${imports[1].originalMatch};\n${imports[2].originalMatch};\n\nexport class ${name} {\n public static doStuff = async (param: string) => {\n   return \`Do somoe stuff with \${param}\`\n };\n}\n`;
+const body = `\n${imports[0].originalMatch}';\n${imports[1].originalMatch};\n${imports[2].originalMatch};\n${imports[3].originalMatch};\n\nexport class ${name} {\n public static doStuff = async (param: string) => {\n   return \`Do somoe stuff with \${param}\`\n };\n}\n`;
 const annotatedDocument = `${header}${body}`;
 const unannotatedDocument = body;
 
