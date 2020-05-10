@@ -8,7 +8,7 @@ import { Annotation } from 'doctrine';
 import {
   extractFilePath,
   removeExtension,
-import { extractFilePath } from './utils/FileSystem';
+  toAbsoluteLocalPath,
 } from './utils/FileSystem';
 import { DocumentParser, DesignDocument } from './DocumentParser';
 import { ConfigurationManager } from './ConfigurationManager';
@@ -53,12 +53,7 @@ export class CRCParser {
   };
 
   public static extractId = (fileUri: vscode.Uri) =>
-    removeExtension(
-      extractFilePath(fileUri)?.replace(
-        `${vscode.workspace.rootPath}/` || '',
-        '',
-      ),
-    );
+    removeExtension(toAbsoluteLocalPath(extractFilePath(fileUri)) as string);
 
   public static extractCRCCard = async (fileUri: vscode.Uri) => {
     const document = await DocumentParser.parse(fileUri, {

@@ -20,3 +20,6 @@ export const extractFileLocation = (fileUri: vscode.Uri) =>
 
 export const removeExtension = (path: vscode.Uri['path']) =>
   path.split('.').slice(0, -1).join('.');
+
+export const toAbsoluteLocalPath = (path?: vscode.Uri['path']) =>
+  path?.replace(`${vscode.workspace.rootPath}/` || '', '');
