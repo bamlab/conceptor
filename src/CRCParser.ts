@@ -5,9 +5,14 @@
 
 import * as vscode from 'vscode';
 import { Annotation } from 'doctrine';
-import { extractFileName } from './utils/FileSystem';
+import {
+  extractFilePath,
+  removeExtension,
+  toAbsoluteLocalPath,
+} from './utils/FileSystem';
 import { DocumentParser, DesignDocument } from './DocumentParser';
 import { ConfigurationManager } from './ConfigurationManager';
+import { Collaborator, Dependency } from './typings/model';
 
 export class CRCParser {
   private static extractNameFromDocumentName = ({ name }: DesignDocument) =>
@@ -30,20 +35,33 @@ export class CRCParser {
         ) as string[])
       : [];
 
-  private static extractCollaborators = (imports: Import[]) =>
-    imports.reduce<string[]>(
-      (allImports, { importList }) => [...allImports, ...importList],
+  private static extractCollaboratorId = (dependency: Dependency) =>
+    toAbsoluteLocalPath(dependency.path.absolute) || dependency.path.raw;
+
+  private static extractCollaborators = (
+    dependencies: Dependency[],
+  ): Collaborator[] => {
+    return dependencies.reduce<Collaborator[]>(
+      (allCollaborators, dependency) => {
+        return [
+          ...allCollaborators,
+          ...dependency.importList.map((importedComponentName: string) => ({
+            id: CRCParser.extractCollaboratorId(dependency),
+            name: importedComponentName,
+          })),
+        ];
+      },
       [],
     );
+  };
 
   public static extractId = (fileUri: vscode.Uri) =>
-    extractFileName(fileUri)?.split('.')[0];
+    removeExtension(toAbsoluteLocalPath(extractFilePath(fileUri)) as string);
 
   public static extractCRCCard = async (fileUri: vscode.Uri) => {
     const document = await DocumentParser.parse(fileUri, {
       skipUnannotated: ConfigurationManager.shouldOnlyIncludeAnnotatedFiles(),
     });
-
     return document
       ? {
           id: CRCParser.extractId(fileUri),
@@ -51,7 +69,7 @@ export class CRCParser {
           responsibilities: CRCParser.extractResponsibilities(
             document.annotation,
           ),
-          collaborators: CRCParser.extractCollaborators(document.imports),
+          collaborators: CRCParser.extractCollaborators(document.dependencies),
         }
       : null;
   };

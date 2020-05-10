@@ -6,8 +6,8 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import { compileTemplate } from './utils/Template';
-import { CRCCard } from './types/model';
-import { NodeType, EdgeType } from './types/view';
+import { CRCCard, Collaborator } from './typings/model';
+import { NodeType, EdgeType } from './typings/view';
 import { ConfigurationManager } from './ConfigurationManager';
 import { ConceptorPanel } from './ConceptorPanel';
 import { CRCParser } from './CRCParser';
@@ -63,17 +63,17 @@ export class DesignGraphGenerator {
   private static createEdges = (crcCards: CRCCard[]) =>
     crcCards.reduce<EdgeType[]>((edges: EdgeType[], crcCard: CRCCard) => {
       const collaborationEdges: EdgeType[] = [];
-      crcCard.collaborators?.forEach((collaborator: string) => {
+      crcCard.collaborators?.forEach((collaborator: Collaborator) => {
         if (
           crcCards.find((otherCRCCard: CRCCard) => {
-            return otherCRCCard.name === collaborator;
+            return otherCRCCard.id === collaborator.id;
           })
         ) {
           collaborationEdges.push({
             data: {
-              id: `Collaboration:${crcCard.id}->${collaborator}`,
+              id: `Collaboration:${crcCard.name}->${collaborator.name}`,
               source: `CRCCard:${crcCard.id}`,
-              target: `CRCCard:${collaborator}`,
+              target: `CRCCard:${collaborator.id}`,
             },
           });
         }

@@ -4,15 +4,20 @@
  **/
 
 import * as vscode from 'vscode';
+import * as path from 'path';
 import { parse, Annotation, Tag } from 'doctrine';
-import { DesignDocumentFormatType } from './types/model';
-import { extractFileName, readFile } from './utils/FileSystem';
+import { DesignDocumentFormatType, Dependency } from './typings/model';
+import {
+  extractFileName,
+  readFile,
+  extractFileLocation,
+} from './utils/FileSystem';
 const ImportParser = require('import-parser');
 
 export interface DesignDocument {
   name?: string;
   annotation?: Annotation;
-  imports: Import[];
+  dependencies: Dependency[];
   body: string;
 }
 
@@ -25,7 +30,7 @@ export class DocumentParser {
     documentText: string,
   ): DesignDocumentFormatType => {
     // TODO: Use a cleaner way to ignore file body and keep header
-    const [header, body] = documentText.split('**/');
+    const [header, body] = documentText.split('*/');
     if (!body) {
       // the file actually has no header
       return {
@@ -38,9 +43,26 @@ export class DocumentParser {
     };
   };
 
-  private static parseImportStatements = (documentBody: string): Import[] => {
+  private static parseImportStatements = (
+    fileUri: vscode.Uri,
+    documentBody: string,
+  ) => {
     try {
-      return ImportParser(documentBody);
+      return (ImportParser(documentBody) as Import[]).map<Dependency>(
+        (importStatement: Import) => ({
+          rawImportStatement: importStatement.originalMatch,
+          path: {
+            raw: importStatement.modulePath,
+            absolute: importStatement.modulePath.startsWith('.')
+              ? path.resolve(
+                  extractFileLocation(fileUri),
+                  importStatement.modulePath,
+                )
+              : undefined,
+          },
+          importList: importStatement.importList,
+        }),
+      );
     } catch {
       return [];
     }
@@ -72,7 +94,7 @@ export class DocumentParser {
     return {
       name: extractFileName(fileUri),
       annotation,
-      imports: DocumentParser.parseImportStatements(body),
+      dependencies: DocumentParser.parseImportStatements(fileUri, body),
       body,
     };
   };
