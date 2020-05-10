@@ -43,7 +43,9 @@ export class CRCParser {
         return [
           ...allCollaborators,
           ...dependency.importList.map((importedComponentName: string) => ({
-            id: dependency.path.absolute || dependency.path.raw,
+            id:
+              toAbsoluteLocalPath(dependency.path.absolute) ||
+              dependency.path.raw,
             name: importedComponentName,
           })),
         ];
