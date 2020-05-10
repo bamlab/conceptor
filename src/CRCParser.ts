@@ -5,7 +5,11 @@
 
 import * as vscode from 'vscode';
 import { Annotation } from 'doctrine';
-import { extractFilePath } from './utils/FileSystem';
+import {
+  extractFilePath,
+  removeExtension,
+  toAbsoluteLocalPath,
+} from './utils/FileSystem';
 import { DocumentParser, DesignDocument } from './DocumentParser';
 import { ConfigurationManager } from './ConfigurationManager';
 import { Collaborator, Dependency } from './typings/model';
@@ -31,6 +35,9 @@ export class CRCParser {
         ) as string[])
       : [];
 
+  private static extractCollaboratorId = (dependency: Dependency) =>
+    toAbsoluteLocalPath(dependency.path.absolute) || dependency.path.raw;
+
   private static extractCollaborators = (
     dependencies: Dependency[],
   ): Collaborator[] => {
@@ -39,7 +46,7 @@ export class CRCParser {
         return [
           ...allCollaborators,
           ...dependency.importList.map((importedComponentName: string) => ({
-            id: dependency.path.absolute || dependency.path.raw,
+            id: CRCParser.extractCollaboratorId(dependency),
             name: importedComponentName,
           })),
         ];
@@ -49,11 +56,7 @@ export class CRCParser {
   };
 
   public static extractId = (fileUri: vscode.Uri) =>
-    extractFilePath(fileUri)
-      ?.replace(`${vscode.workspace.rootPath}/` || '', '')
-      .split('.')
-      .slice(0, -1)
-      .join('.');
+    removeExtension(toAbsoluteLocalPath(extractFilePath(fileUri)) as string);
 
   public static extractCRCCard = async (fileUri: vscode.Uri) => {
     const document = await DocumentParser.parse(fileUri, {
