@@ -35,6 +35,9 @@ export class CRCParser {
         ) as string[])
       : [];
 
+  private static extractCollaboratorId = (dependency: Dependency) =>
+    toAbsoluteLocalPath(dependency.path.absolute) || dependency.path.raw;
+
   private static extractCollaborators = (
     dependencies: Dependency[],
   ): Collaborator[] => {
@@ -43,9 +46,7 @@ export class CRCParser {
         return [
           ...allCollaborators,
           ...dependency.importList.map((importedComponentName: string) => ({
-            id:
-              toAbsoluteLocalPath(dependency.path.absolute) ||
-              dependency.path.raw,
+            id: CRCParser.extractCollaboratorId(dependency),
             name: importedComponentName,
           })),
         ];
