@@ -1,0 +1,21 @@
+diff --git a/node_modules/import-parser/index.js b/node_modules/import-parser/index.js
+index 3d17ed0..e7d761e 100644
+--- a/node_modules/import-parser/index.js
++++ b/node_modules/import-parser/index.js
+@@ -1,10 +1,14 @@
+ // Props to https://gist.github.com/pilwon/ff55634a29bb4456e0dd
+-const ES6_IMPORT_REGEX = /\bimport\s+(?:.+\s+from\s+)?[\'"]([^"\']+)["\']/g;
++// Support for Multiline import statements has been inspired by
++// https://gist.github.com/manekinekko/7e58a17bc62a9be47172#gistcomment-2326123
++// https://regex101.com/r/giqmTO/8
++const ES6_IMPORT_REGEX = /\bimport(?:["'\s]*([\w*{}\n\r\t, ]+)from\s*)?["'\s].*([@\w/_-]+)["'\s].*/g;
+ const ES6_INDIVIDUAL_IMPORT_REGEX = /\bimport(\s+(?:).+\s+from\s+)?[\'"]([^"\']+)["\']/;
+ const CLEAR_REGEX = /{|}|from| /g;
+ 
+ function parseImport(rawImport) {
+-  const groups = ES6_INDIVIDUAL_IMPORT_REGEX.exec(rawImport);
++  const singleLineRawImport = rawImport.replace(/\n/g, ' ');
++  const groups = ES6_INDIVIDUAL_IMPORT_REGEX.exec(singleLineRawImport);
+   const [, imports, modulePath] = groups;
+   const clearedImportList = imports.replace(CLEAR_REGEX, '').split(',');
+   return {
