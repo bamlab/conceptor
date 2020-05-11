@@ -2,7 +2,7 @@
   "name": "conceptor",
   "displayName": "Conceptor",
   "description": "",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "repository": "https://github.com/bamlab/conceptor",
   "publisher": "guitoof",
   "engines": {
@@ -108,7 +108,6 @@
     "vscode-test": "^1.3.0"
   },
   "dependencies": {
-    "cytoscape-node-html-label": "^1.2.0",
     "doctrine": "^3.0.0",
     "ejs": "^3.0.2",
     "import-parser": "^0.0.2",
