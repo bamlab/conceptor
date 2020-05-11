@@ -58,14 +58,6 @@ export class ConceptorPanel {
     this._panel.onDidDispose(() => this.dispose(), null, this._disposables);
   }
 
-  public loadDependencies = (dependenciePaths: string[]) =>
-    dependenciePaths.map((dependencyPath: string) => {
-      const webviewUri = this._panel.webview.asWebviewUri(
-        vscode.Uri.file(dependencyPath),
-      );
-      return ConceptorPanel.adaptWebviewUri(webviewUri);
-    });
-
   public setContent(content: string) {
     this._panel.webview.html = content;
   }

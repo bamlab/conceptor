@@ -18,9 +18,7 @@
   <body>
     <div id="cy"></div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.14.1/cytoscape.min.js"></script>
-    <% dependencies.forEach(dependency => { %>
-    <script src="<%- dependency %>"></script>
-    <%});%>
+    <script src="https://cdn.jsdelivr.net/npm/cytoscape-node-html-label@1.2.0/dist/cytoscape-node-html-label.min.js"></script>
     <script>
       <%- script %>
     </script>

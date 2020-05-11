@@ -35,15 +35,6 @@ export class DesignGraphGenerator {
     });
   }
 
-  private loadDependencies = () =>
-    this._panel.loadDependencies([
-      path.join(
-        this._context.extensionPath,
-        'node_modules/cytoscape-node-html-label/dist',
-        'cytoscape-node-html-label.min.js',
-      ),
-    ]);
-
   private static createNodes = async (crcCards: CRCCard[]) =>
     Promise.all(
       crcCards.map(async (crcCard) => ({
@@ -96,12 +87,10 @@ export class DesignGraphGenerator {
     });
 
   public generateDesignGraph = async (crcCards: CRCCard[]) => {
-    const dependencies = this.loadDependencies();
     const nodes = await DesignGraphGenerator.createNodes(crcCards);
     const edges = DesignGraphGenerator.createEdges(crcCards);
 
     return compileTemplate('index.html', {
-      dependencies,
       script: await DesignGraphGenerator.compileGraphScript(nodes, edges),
     });
   };
