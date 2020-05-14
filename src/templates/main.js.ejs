@@ -51,8 +51,8 @@ window.addEventListener('message', (event) => {
       const targetID = event.data.targetID;
       let target = cy.elements(`node[id = "${targetID}"]`)
       let padding = 100;
-      if (<%- options.includeSuccessorsOnFocus %> && !target.outgoers().empty()) {
-        target = target.outgoers();
+      if (<%- options.includeSuccessorsOnFocus %> && !target.closedNeighborhood().empty()) {
+        target = target.closedNeighborhood();
         padding = 0;
       }
       cy.fit(target, padding);
