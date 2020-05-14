@@ -44,18 +44,22 @@ var cy = cytoscape({
       }]);
 <%});%>
 
+function focusOnTarget(targetID) {
+  let target = cy.elements(`node[id = "${targetID}"]`)
+      let padding = 100;
+      if (<%- options.includeSuccessorsOnFocus %> && !target.closedNeighborhood().empty()) {
+        target = target.closedNeighborhood();
+        padding = 0;
+      }
+      cy.fit(target, padding);
+}
+
 window.addEventListener('message', (event) => {
   const type = event.data.type;
   switch(type) {
     case 'focus':
       const targetID = event.data.targetID;
-      let target = cy.elements(`node[id = "${targetID}"]`)
-      let padding = 100;
-      if (<%- options.includeSuccessorsOnFocus %> && !target.outgoers().empty()) {
-        target = target.outgoers();
-        padding = 0;
-      }
-      cy.fit(target, padding);
+      focusOnTarget(targetID);
     default: break;
   }
 });
