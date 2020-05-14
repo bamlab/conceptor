@@ -26,17 +26,6 @@ export class DesignGraphGenerator {
   public constructor(panel: ConceptorPanel, context: vscode.ExtensionContext) {
     this._panel = panel;
     this._context = context;
-
-    vscode.window.onDidChangeActiveTextEditor((editor?: vscode.TextEditor) => {
-      if (!editor) {
-        return;
-      }
-      const document = editor.document;
-      this._panel.postMessage({
-        type: 'focus',
-        targetID: `CRCCard:${CRCParser.extractId(document.uri)}`,
-      });
-    });
   }
 
   private static createNodes = async (crcCards: CRCCard[]) =>
@@ -98,4 +87,10 @@ export class DesignGraphGenerator {
       script: await DesignGraphGenerator.compileGraphScript(nodes, edges),
     });
   };
+
+  public triggerFocusOnCard = (document: vscode.TextDocument) =>
+    this._panel.postMessage({
+      type: 'focus',
+      targetID: `CRCCard:${CRCParser.extractId(document.uri)}`,
+    });
 }
