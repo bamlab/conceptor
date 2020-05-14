@@ -27,7 +27,11 @@ export class DesignGraphGenerator {
     this._panel = panel;
     this._context = context;
 
-    vscode.workspace.onDidOpenTextDocument((document: vscode.TextDocument) => {
+    vscode.window.onDidChangeActiveTextEditor((editor?: vscode.TextEditor) => {
+      if (!editor) {
+        return;
+      }
+      const document = editor.document;
       this._panel.postMessage({
         type: 'focus',
         targetID: `CRCCard:${CRCParser.extractId(document.uri)}`,
