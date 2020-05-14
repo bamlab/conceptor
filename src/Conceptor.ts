@@ -27,10 +27,9 @@ export class Conceptor {
     );
   };
 
-  public constructor(context: vscode.ExtensionContext) {
+  public constructor() {
     this.designGraphGenerator = new DesignGraphGenerator(
       ConceptorPanelManager.createOrShow(),
-      context,
     );
 
     // Register lifecycle listeners
