@@ -27,14 +27,19 @@ export class Conceptor {
     );
   };
 
-  public constructor(context: vscode.ExtensionContext) {
+  public constructor() {
     this.designGraphGenerator = new DesignGraphGenerator(
       ConceptorPanelManager.createOrShow(),
-      context,
     );
 
     // Register lifecycle listeners
     vscode.workspace.onDidSaveTextDocument(this.buildDesignGraph);
+    vscode.window.onDidChangeActiveTextEditor((editor?: vscode.TextEditor) => {
+      if (!editor) {
+        return;
+      }
+      this.designGraphGenerator.triggerFocusOnCard(editor.document);
+    });
   }
 
   public buildDesignGraph = async () => {

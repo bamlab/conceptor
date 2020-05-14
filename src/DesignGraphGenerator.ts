@@ -4,7 +4,6 @@
  **/
 
 import * as vscode from 'vscode';
-import * as path from 'path';
 import { compileTemplate } from './utils/Template';
 import { CRCCard, Collaborator } from './typings/model';
 import { NodeType, EdgeType } from './typings/view';
@@ -21,18 +20,9 @@ const style = {
 
 export class DesignGraphGenerator {
   private readonly _panel: ConceptorPanel;
-  private readonly _context: vscode.ExtensionContext;
 
-  public constructor(panel: ConceptorPanel, context: vscode.ExtensionContext) {
+  public constructor(panel: ConceptorPanel) {
     this._panel = panel;
-    this._context = context;
-
-    vscode.workspace.onDidOpenTextDocument((document: vscode.TextDocument) => {
-      this._panel.postMessage({
-        type: 'focus',
-        targetID: `CRCCard:${CRCParser.extractId(document.uri)}`,
-      });
-    });
   }
 
   private static createNodes = async (crcCards: CRCCard[]) =>
@@ -94,4 +84,10 @@ export class DesignGraphGenerator {
       script: await DesignGraphGenerator.compileGraphScript(nodes, edges),
     });
   };
+
+  public triggerFocusOnCard = (document: vscode.TextDocument) =>
+    this._panel.postMessage({
+      type: 'focus',
+      targetID: `CRCCard:${CRCParser.extractId(document.uri)}`,
+    });
 }
