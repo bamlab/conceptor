@@ -5,6 +5,12 @@ All notable changes to the "conceptor" extension will be documented in this file
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.5] - 19-05-2020
+
+### 🚑 Fixed
+
+- Fix parsing errors: we use to wrongly detect annotated files when files contains any "/\* ... \*/" comments or simply the string "\*/". This is no longer the case 😉
+
 ## [0.4.4] - 15-05-2020
 
 ### 🚑 Fixed
