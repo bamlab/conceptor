@@ -29,17 +29,15 @@ export class DocumentParser {
   private static preparseDocument = (
     documentText: string,
   ): DesignDocumentFormatType => {
-    // TODO: Use a cleaner way to ignore file body and keep header
-    const [header, body] = documentText.split('*/');
-    if (!body) {
-      // the file actually has no header
+    const header = documentText.match(/(\/\*\*)([\s\S]*?)(\*\/)/g)?.shift();
+    if (!header) {
       return {
-        body: header,
+        body: documentText,
       };
     }
     return {
       header,
-      body,
+      body: documentText.replace(header, ''),
     };
   };
 
