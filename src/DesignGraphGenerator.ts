@@ -30,6 +30,7 @@ export class DesignGraphGenerator {
       crcCards.map(async (crcCard) => ({
         data: {
           id: `CRCCard:${crcCard.id}`,
+          parent: `Group:${crcCard.id.split('/').slice(0, -1).join('/')}`,
           content: await compileTemplate('crc-card.html', {
             data: {
               name: crcCard.name,
@@ -40,6 +41,14 @@ export class DesignGraphGenerator {
         },
       })),
     );
+
+  private static createGroups = (crcCards: CRCCard[]) => {
+    return crcCards.map((crcCard) => {
+      return {
+        data: { id: `Group:${crcCard.id.split('/').slice(0, -1).join('/')}` },
+      };
+    });
+  };
 
   private static createEdges = (crcCards: CRCCard[]) =>
     crcCards.reduce<EdgeType[]>((edges: EdgeType[], crcCard: CRCCard) => {
@@ -78,10 +87,14 @@ export class DesignGraphGenerator {
 
   public generateDesignGraph = async (crcCards: CRCCard[]) => {
     const nodes = await DesignGraphGenerator.createNodes(crcCards);
+    const groups = DesignGraphGenerator.createGroups(crcCards);
     const edges = DesignGraphGenerator.createEdges(crcCards);
 
     return compileTemplate('index.html', {
-      script: await DesignGraphGenerator.compileGraphScript(nodes, edges),
+      script: await DesignGraphGenerator.compileGraphScript(
+        [...nodes, ...groups],
+        edges,
+      ),
     });
   };
 

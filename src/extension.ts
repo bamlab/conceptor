@@ -24,7 +24,7 @@ export const activate = (context: vscode.ExtensionContext) => {
   let disposable = vscode.commands.registerCommand('conceptor', async () => {
     // The code you place here will be executed every time your command is executed
 
-    const conceptor = new Conceptor();
+    const conceptor = new Conceptor(context);
     await conceptor.buildDesignGraph();
 
     vscode.window.showInformationMessage('✅ Design Graph ready, 🙌 enjoy!');

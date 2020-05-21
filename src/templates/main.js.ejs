@@ -11,6 +11,13 @@ const style = [
     },
   },
   {
+    selector: 'node[id ^= "Group:"]',
+    style: {
+      shape: 'round-rectangle',
+      'background-color': 'red'
+    },
+  },
+  {
     selector: 'edge',
     style: {
       'curve-style': 'bezier',
@@ -33,6 +40,7 @@ var cy = cytoscape({
 });
 
 <% nodes.forEach((node) => { %>
+  <% if (!node.data.content) { return; }%>
     cy.nodeHtmlLabel([{
         query: 'node[id = "' + <%- JSON.stringify(node.data.id) %> + '"]',
         valign: "center",

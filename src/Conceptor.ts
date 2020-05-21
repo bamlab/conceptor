@@ -11,8 +11,10 @@ import { DesignGraphGenerator } from './DesignGraphGenerator';
 import { CRCCard } from './typings/model';
 import { ConfigurationManager } from './ConfigurationManager';
 import { ConceptorPanelManager } from './ConceptorPanelManager';
+import * as dirTree from 'directory-tree';
 
 export class Conceptor {
+  private context: vscode.ExtensionContext;
   private designGraphGenerator: DesignGraphGenerator;
 
   private static findFiles = async () =>
@@ -27,7 +29,8 @@ export class Conceptor {
     );
   };
 
-  public constructor() {
+  public constructor(context: vscode.ExtensionContext) {
+    this.context = context;
     this.designGraphGenerator = new DesignGraphGenerator(
       ConceptorPanelManager.createOrShow(),
     );
@@ -44,6 +47,20 @@ export class Conceptor {
 
   public buildDesignGraph = async () => {
     const fileUris = await Conceptor.findFiles();
+
+    const filteredTree = dirTree(`${vscode.workspace.rootPath}`, {
+      exclude: /\..*/,
+      extensions: /\.(ts|tsx$)/,
+    });
+    console.log(filteredTree.children?.length);
+    filteredTree.children?.forEach((folder) => {
+      console.log(folder.path);
+      if (folder.path.includes('/src')) {
+        folder.children?.forEach((toto) => {
+          console.log(toto.path);
+        });
+      }
+    });
 
     const crcCards = (await CRCCardsGenerator.generateCRCCards(
       fileUris,
